@@ -1,3 +1,5 @@
+### Website version: https://sunpy.org/posts/2022/2022-01-06-aiapy-demo/#Wavelength-Response-Functions ###
+
 ## aiapy: A SunPy affiliated package for analyzing data from the Atmospheric Imaging Assembly ##
 #1: import astropy
 #1: import astropy.units as u
