@@ -83,33 +83,33 @@ ax.legend(loc='upper center', ncol=2, frameon=False, bbox_to_anchor=(0.5,1.15))
 plt.tight_layout()
 
 ## Respiking LVL 1 Images ##
-#14: m_171_respiked = respike(m_171)
+m_171_respiked = respike(m_171)
 
-#15: fig = plt.figure(figsize=(7, 3))
-#15: ax = fig.add_subplot(121, projection=m_171)
-#15: m_171.plot(axes=ax)
-#15: ax.set_title(f"Despiked (Level {m_171.processing_level:.0f})")
-#15: ax = fig.add_subplot(122, projection=m_171_respiked)
-#15: m_171_respiked.plot(axes=ax)
-#15: ax.set_title(f"Respiked (Level {m_171_respiked.processing_level})")
-#15: ax.coords[1].set_axislabel(' ')
+fig = plt.figure(figsize=(7, 3))
+ax = fig.add_subplot(121, projection=m_171)
+m_171.plot(axes=ax)
+ax.set_title(f"Despiked (Level {m_171.processing_level:.0f})")
+ax = fig.add_subplot(122, projection=m_171_respiked)
+m_171_respiked.plot(axes=ax)
+ax.set_title(f"Respiked (Level {m_171_respiked.processing_level})")
+ax.coords[1].set_axislabel(' ')
 
-#16: pix_coords, vals = fetch_spikes(m_171,)
+pix_coords, vals = fetch_spikes(m_171,)
 
-#17: vals_despiked = m_171.data[pix_coords.y.value.round().astype(int), pix_coords.x.value.round().astype(int)]
+vals_despiked = m_171.data[pix_coords.y.value.round().astype(int), pix_coords.x.value.round().astype(int)]
 
-#18: plt.hist(vals, bins='scott', log=True, histtype='step', label='Respiked');
-#18: plt.hist(vals_despiked, bins='scott', log=True, histtype='step', label='Despiked');
-#18: plt.legend()
-#18: plt.xlabel(f'Intensity [{m_171.unit.to_string()}]')
-#18: plt.ylabel('Number of Pixels')
+plt.hist(vals, bins='scott', log=True, histtype='step', label='Respiked');
+plt.hist(vals_despiked, bins='scott', log=True, histtype='step', label='Despiked');
+plt.legend()
+plt.xlabel(f'Intensity [{m_171.unit.to_string()}]')
+plt.ylabel('Number of Pixels')
 
-#19: spike_coords = m_171.pixel_to_world(pix_coords.x, pix_coords.y)
+spike_coords = m_171.pixel_to_world(pix_coords.x, pix_coords.y)
 
-#20: fig = plt.figure()
-#20: ax = fig.add_subplot(111, projection=m_171_respiked)
-#20: m_171_respiked.plot(axes=ax)
-#20: ax.plot_coord(spike_coords, marker='.', ls=' ', markersize=1)
+fig = plt.figure()
+ax = fig.add_subplot(111, projection=m_171_respiked)
+m_171_respiked.plot(axes=ax)
+ax.plot_coord(spike_coords, marker='.', ls=' ', markersize=1)
 
 ## Transforming LVL 1 Images to LVL 1.5
 #21: m_171_up = update_pointing(m_171)
