@@ -1,87 +1,86 @@
 ### Website version: https://sunpy.org/posts/2022/2022-01-06-aiapy-demo/#Wavelength-Response-Functions ###
 
 ## aiapy: A SunPy affiliated package for analyzing data from the Atmospheric Imaging Assembly ##
-import astropy
-import astropy.units as u
-from astropy.coordinates import SkyCoord
-import astropy.time
-from astropy.visualization import time_support, ImageNormalize, LogStretch
-import numpy as np
-import matplotlib.pyplot as plt
-import sunpy
-import sunpy.map
-from sunpy.net import Fido, attrs as a
-from sunpy.time import parse_time
+#1: import astropy
+#1: import astropy.units as u
+#1: from astropy.coordinates import SkyCoord
+#1: import astropy.time
+#1: from astropy.visualization import time_support, ImageNormalize, LogStretch
+#1: import numpy as np
+#1: import matplotlib.pyplot as plt
+#1: import sunpy
+#1: import sunpy.map
+#1: from sunpy.net import Fido, attrs as a
+#1: from sunpy.time import parse_time
+#1: 
+#1: import aiapy
+#1: from aiapy.psf import psf, deconvolve
+#1: from aiapy.calibrate import (register,update_pointing,correct_degradation, estimate_error,
+#1:                              degradation,normalize_exposure, respike, fetch_spikes)
+#1: from aiapy.calibrate.util import get_correction_table
+#1: from aiapy.response import Channel
+#1: 
+#1: import matplotlib as mpl
+#1: # Increases the figure size in this notebook.
+#1: mpl.rcParams["savefig.dpi"] = 150
+#1: mpl.rcParams["figure.dpi"] = 150
 
-import aiapy
-from aiapy.psf import psf, deconvolve
-from aiapy.calibrate import (register,update_pointing,correct_degradation, estimate_error,
-                             degradation,normalize_exposure, respike, fetch_spikes)
-from aiapy.calibrate.util import get_correction_table
-from aiapy.response import Channel
-
-import matplotlib as mpl
-# Increases the figure size in this notebook.
-mpl.rcParams["savefig.dpi"] = 150
-mpl.rcParams["figure.dpi"] = 150
-
-print(f'astropy v{astropy.__version__}')
-print(f'sunpy v{sunpy.__version__}')
-print(f'aiapy v{aiapy.__version__}')
+#2: print(f'astropy v{astropy.__version__}')
+#2: print(f'sunpy v{sunpy.__version__}')
+#2: print(f'aiapy v{aiapy.__version__}')
 
 ## Obtaining AIA Data ##
-t_start = parse_time('2024-04-14T22:45:09')
-search_results = Fido.search(
-    a.Time(t_start, t_start+11*u.s),
-    a.Instrument.aia,
-    a.Wavelength(171*u.angstrom) | a.Wavelength(335*u.angstrom),
-)
-search_results
+#3: t_start = parse_time('2017-09-10T20:00:00')
+#3: search_results = Fido.search(
+#3:     a.Time(t_start, t_start+11*u.s),
+#3:     a.Instrument.aia,
+#3:     a.Wavelength(171*u.angstrom) | a.Wavelength(335*u.angstrom),
+#3: )
+#3: search_results
 
-files = Fido.fetch(search_results, max_conn=1)
+#4: files = Fido.fetch(search_results, max_conn=1)
 
-m_171, m_335 = sunpy.map.Map(sorted(files))
+#5: m_171, m_335 = sunpy.map.Map(sorted(files))
 
-m_171.peek(vmin=0)
-m_335.peek(vmin=0)
+#6: m_171.peek(vmin=0)
+#6: m_335.peek(vmin=0)
 
 ## PSF Deconvolution ##
-psf_171 = psf(m_171.wavelength)
+#7: psf_171 = psf(m_171.wavelength)
 
-plt.imshow(psf_171, origin='lower', norm=ImageNormalize(vmax=1e-6, stretch=LogStretch()))
-plt.colorbar()
+#8: plt.imshow(psf_171, origin='lower', norm=ImageNormalize(vmax=1e-6, stretch=LogStretch()))
+#8: plt.colorbar()
 
-m_171_deconvolved = deconvolve(m_171, psf=psf_171)
+#9: m_171_deconvolved = deconvolve(m_171, psf=psf_171)
 
-blc = SkyCoord(750,-375,unit='arcsec',frame=m_171.coordinate_frame)
-fov = {'width': 400*u.arcsec, 'height': 400*u.arcsec}
-m_171_cutex
-out = m_171.submap(blc, **fov)
-m_171_deconvolved_cutout = mcupy_171_deconvolved.submap(blc, **fov)
+#10: blc = SkyCoord(750,-375,unit='arcsec',frame=m_171.coordinate_frame)
+#10: fov = {'width': 400*u.arcsec, 'height': 400*u.arcsec}
+#10: m_171_cutout = m_171.submap(blc, **fov)
+#10: m_171_deconvolved_cutout = m_171_deconvolved.submap(blc, **fov)
 
-fig = plt.figure(figsize=(7,3))
-ax = fig.add_subplot(121, projection=m_171_cutout)
-m_171_cutout.plot(axes=ax, title='Before Deconvolution')
-ax = fig.add_subplot(122, projection=m_171_deconvolved_cutout)
-m_171_deconvolved_cutout.plot(axes=ax, title='After Deconvolution')
-ax.coords[1].set_axislabel(' ')
+#11: fig = plt.figure(figsize=(7,3))
+#11: ax = fig.add_subplot(121, projection=m_171_cutout)
+#11: m_171_cutout.plot(axes=ax, title='Before Deconvolution')
+#11: ax = fig.add_subplot(122, projection=m_171_deconvolved_cutout)
+#11: m_171_deconvolved_cutout.plot(axes=ax, title='After Deconvolution')
+#11: ax.coords[1].set_axislabel(' ')
 
-x = np.linspace(m_171_deconvolved_cutout.dimensions.x.value*0.55, m_171_deconvolved_cutout.dimensions.x.value*0.7)
-y = 0.59 * m_171_deconvolved_cutout.dimensions.y.value * np.ones(x.shape)
-sl = np.s_[np.round(y[0]).astype(int), np.round(x[0]).astype(int):np.round(x[-1]).astype(int)]
+#12: x = np.linspace(m_171_deconvolved_cutout.dimensions.x.value*0.55, m_171_deconvolved_cutout.dimensions.x.value*0.7)
+#12: y = 0.59 * m_171_deconvolved_cutout.dimensions.y.value * np.ones(x.shape)
+#12: sl = np.s_[np.round(y[0]).astype(int), np.round(x[0]).astype(int):np.round(x[-1]).astype(int)]
 
-fig = plt.figure(figsize=(7,3))
-ax = fig.add_subplot(121, projection=m_171_deconvolved_cutout)
-m_171_deconvolved_cutout.plot(axes=ax)
-ax.plot(x, y, lw=1)
-ax = fig.add_subplot(122)
-Tx = sunpy.map.all_coordinates_from_map(m_171_cutout)[sl].Tx
-ax.plot(Tx,m_171_cutout.data[sl], label='Original')
-ax.plot(Tx,m_171_deconvolved_cutout.data[sl], label='Deconvolved')
-ax.set_ylabel(f'Intensity [{m_171_cutout.unit}]')
-ax.set_xlabel(r'Helioprojective Longitude [arcsec]')
-ax.legend(loc='upper center', ncol=2, frameon=False, bbox_to_anchor=(0.5,1.15))
-plt.tight_layout()
+#13: fig = plt.figure(figsize=(7,3))
+#13: ax = fig.add_subplot(121, projection=m_171_deconvolved_cutout)
+#13: m_171_deconvolved_cutout.plot(axes=ax)
+#13: ax.plot(x, y, lw=1)
+#13: ax = fig.add_subplot(122)
+#13: Tx = sunpy.map.all_coordinates_from_map(m_171_cutout)[sl].Tx
+#13: ax.plot(Tx,m_171_cutout.data[sl], label='Original')
+#13: ax.plot(Tx,m_171_deconvolved_cutout.data[sl], label='Deconvolved')
+#13: ax.set_ylabel(f'Intensity [{m_171_cutout.unit}]')
+#13: ax.set_xlabel(r'Helioprojective Longitude [arcsec]')
+#13: ax.legend(loc='upper center', ncol=2, frameon=False, bbox_to_anchor=(0.5,1.15))
+#13: plt.tight_layout()
 
 ## Respiking LVL 1 Images ##
 #14: m_171_respiked = respike(m_171)
