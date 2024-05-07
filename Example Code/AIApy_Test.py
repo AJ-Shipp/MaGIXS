@@ -55,8 +55,7 @@ m_171_deconvolved = deconvolve(m_171, psf=psf_171)
 
 blc = SkyCoord(750,-375,unit='arcsec',frame=m_171.coordinate_frame)
 fov = {'width': 400*u.arcsec, 'height': 400*u.arcsec}
-m_171_cutex
-out = m_171.submap(blc, **fov)
+m_171_cutout = m_171.submap(blc, **fov)
 m_171_deconvolved_cutout = mcupy_171_deconvolved.submap(blc, **fov)
 
 fig = plt.figure(figsize=(7,3))
