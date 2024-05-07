@@ -46,70 +46,70 @@ m_171.peek(vmin=0)
 m_335.peek(vmin=0)
 
 ## PSF Deconvolution ##
-psf_171 = psf(m_171.wavelength)
+#7: psf_171 = psf(m_171.wavelength)
 
-plt.imshow(psf_171, origin='lower', norm=ImageNormalize(vmax=1e-6, stretch=LogStretch()))
-plt.colorbar()
+#8: plt.imshow(psf_171, origin='lower', norm=ImageNormalize(vmax=1e-6, stretch=LogStretch()))
+#8: plt.colorbar()
 
-m_171_deconvolved = deconvolve(m_171, psf=psf_171)
+#9: m_171_deconvolved = deconvolve(m_171, psf=psf_171)
 
-blc = SkyCoord(750,-375,unit='arcsec',frame=m_171.coordinate_frame)
-fov = {'width': 400*u.arcsec, 'height': 400*u.arcsec}
-m_171_cutout = m_171.submap(blc, **fov)
-m_171_deconvolved_cutout = mcupy_171_deconvolved.submap(blc, **fov)
+#10: blc = SkyCoord(750,-375,unit='arcsec',frame=m_171.coordinate_frame)
+#10: fov = {'width': 400*u.arcsec, 'height': 400*u.arcsec}
+#10: m_171_cutout = m_171.submap(blc, **fov)
+#10: m_171_deconvolved_cutout = m_171_deconvolved.submap(blc, **fov)
 
-fig = plt.figure(figsize=(7,3))
-ax = fig.add_subplot(121, projection=m_171_cutout)
-m_171_cutout.plot(axes=ax, title='Before Deconvolution')
-ax = fig.add_subplot(122, projection=m_171_deconvolved_cutout)
-m_171_deconvolved_cutout.plot(axes=ax, title='After Deconvolution')
-ax.coords[1].set_axislabel(' ')
+#11: fig = plt.figure(figsize=(7,3))
+#11: ax = fig.add_subplot(121, projection=m_171_cutout)
+#11: m_171_cutout.plot(axes=ax, title='Before Deconvolution')
+#11: ax = fig.add_subplot(122, projection=m_171_deconvolved_cutout)
+#11: m_171_deconvolved_cutout.plot(axes=ax, title='After Deconvolution')
+#11: ax.coords[1].set_axislabel(' ')
 
-x = np.linspace(m_171_deconvolved_cutout.dimensions.x.value*0.55, m_171_deconvolved_cutout.dimensions.x.value*0.7)
-y = 0.59 * m_171_deconvolved_cutout.dimensions.y.value * np.ones(x.shape)
-sl = np.s_[np.round(y[0]).astype(int), np.round(x[0]).astype(int):np.round(x[-1]).astype(int)]
+#12: x = np.linspace(m_171_deconvolved_cutout.dimensions.x.value*0.55, m_171_deconvolved_cutout.dimensions.x.value*0.7)
+#12: y = 0.59 * m_171_deconvolved_cutout.dimensions.y.value * np.ones(x.shape)
+#12: sl = np.s_[np.round(y[0]).astype(int), np.round(x[0]).astype(int):np.round(x[-1]).astype(int)]
 
-fig = plt.figure(figsize=(7,3))
-ax = fig.add_subplot(121, projection=m_171_deconvolved_cutout)
-m_171_deconvolved_cutout.plot(axes=ax)
-ax.plot(x, y, lw=1)
-ax = fig.add_subplot(122)
-Tx = sunpy.map.all_coordinates_from_map(m_171_cutout)[sl].Tx
-ax.plot(Tx,m_171_cutout.data[sl], label='Original')
-ax.plot(Tx,m_171_deconvolved_cutout.data[sl], label='Deconvolved')
-ax.set_ylabel(f'Intensity [{m_171_cutout.unit}]')
-ax.set_xlabel(r'Helioprojective Longitude [arcsec]')
-ax.legend(loc='upper center', ncol=2, frameon=False, bbox_to_anchor=(0.5,1.15))
-plt.tight_layout()
+#13: fig = plt.figure(figsize=(7,3))
+#13: ax = fig.add_subplot(121, projection=m_171_deconvolved_cutout)
+#13: m_171_deconvolved_cutout.plot(axes=ax)
+#13: ax.plot(x, y, lw=1)
+#13: ax = fig.add_subplot(122)
+#13: Tx = sunpy.map.all_coordinates_from_map(m_171_cutout)[sl].Tx
+#13: ax.plot(Tx,m_171_cutout.data[sl], label='Original')
+#13: ax.plot(Tx,m_171_deconvolved_cutout.data[sl], label='Deconvolved')
+#13: ax.set_ylabel(f'Intensity [{m_171_cutout.unit}]')
+#13: ax.set_xlabel(r'Helioprojective Longitude [arcsec]')
+#13: ax.legend(loc='upper center', ncol=2, frameon=False, bbox_to_anchor=(0.5,1.15))
+#13: plt.tight_layout()
 
 ## Respiking LVL 1 Images ##
-m_171_respiked = respike(m_171)
+#14: m_171_respiked = respike(m_171)
 
-fig = plt.figure(figsize=(7, 3))
-ax = fig.add_subplot(121, projection=m_171)
-m_171.plot(axes=ax)
-ax.set_title(f"Despiked (Level {m_171.processing_level:.0f})")
-ax = fig.add_subplot(122, projection=m_171_respiked)
-m_171_respiked.plot(axes=ax)
-ax.set_title(f"Respiked (Level {m_171_respiked.processing_level})")
-ax.coords[1].set_axislabel(' ')
+#15: fig = plt.figure(figsize=(7, 3))
+#15: ax = fig.add_subplot(121, projection=m_171)
+#15: m_171.plot(axes=ax)
+#15: ax.set_title(f"Despiked (Level {m_171.processing_level:.0f})")
+#15: ax = fig.add_subplot(122, projection=m_171_respiked)
+#15: m_171_respiked.plot(axes=ax)
+#15: ax.set_title(f"Respiked (Level {m_171_respiked.processing_level})")
+#15: ax.coords[1].set_axislabel(' ')
 
-pix_coords, vals = fetch_spikes(m_171,)
+#16: pix_coords, vals = fetch_spikes(m_171,)
 
-vals_despiked = m_171.data[pix_coords.y.value.round().astype(int), pix_coords.x.value.round().astype(int)]
+#17: vals_despiked = m_171.data[pix_coords.y.value.round().astype(int), pix_coords.x.value.round().astype(int)]
 
-plt.hist(vals, bins='scott', log=True, histtype='step', label='Respiked');
-plt.hist(vals_despiked, bins='scott', log=True, histtype='step', label='Despiked');
-plt.legend()
-plt.xlabel(f'Intensity [{m_171.unit.to_string()}]')
-plt.ylabel('Number of Pixels')
+#18: plt.hist(vals, bins='scott', log=True, histtype='step', label='Respiked');
+#18: plt.hist(vals_despiked, bins='scott', log=True, histtype='step', label='Despiked');
+#18: plt.legend()
+#18: plt.xlabel(f'Intensity [{m_171.unit.to_string()}]')
+#18: plt.ylabel('Number of Pixels')
 
-spike_coords = m_171.pixel_to_world(pix_coords.x, pix_coords.y)
+#19: spike_coords = m_171.pixel_to_world(pix_coords.x, pix_coords.y)
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection=m_171_respiked)
-m_171_respiked.plot(axes=ax)
-ax.plot_coord(spike_coords, marker='.', ls=' ', markersize=1)
+#20: fig = plt.figure()
+#20: ax = fig.add_subplot(111, projection=m_171_respiked)
+#20: m_171_respiked.plot(axes=ax)
+#20: ax.plot_coord(spike_coords, marker='.', ls=' ', markersize=1)
 
 ## Transforming LVL 1 Images to LVL 1.5
 #21: m_171_up = update_pointing(m_171)
