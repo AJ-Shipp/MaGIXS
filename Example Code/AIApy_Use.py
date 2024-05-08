@@ -12,6 +12,7 @@ import sunpy
 import sunpy.map
 from sunpy.net import Fido, attrs as a
 from sunpy.time import parse_time
+#import cupy
 
 import aiapy
 from aiapy.psf import psf, deconvolve
@@ -40,13 +41,13 @@ search_results
 
 files = Fido.fetch(search_results, max_conn=1)
 
-m_171, m_335 = sunpy.map.Map(sorted(files))
+m_171_a14, m_335_a14 = sunpy.map.Map(sorted(files))
 
-m_171.peek(vmin=0)
-m_335.peek(vmin=0)
+m_171_a14.peek(vmin=0)
+m_335_a14.peek(vmin=0)
 
 ## PSF Deconvolution ##
-#7: psf_171 = psf(m_171.wavelength)
+#psf_171_a14 = psf(m_171_a14.wavelength)
 
 #8: plt.imshow(psf_171, origin='lower', norm=ImageNormalize(vmax=1e-6, stretch=LogStretch()))
 #8: plt.colorbar()
