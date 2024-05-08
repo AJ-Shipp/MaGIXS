@@ -43,14 +43,15 @@ files = Fido.fetch(search_results, max_conn=1)
 
 m_171_a14, m_335_a14 = sunpy.map.Map(sorted(files))
 
-m_171_a14.peek(vmin=0)
-m_335_a14.peek(vmin=0)
+#N/a: m_171_a14.peek(vmin=0)
+#N/a: m_335_a14.peek(vmin=0)
 
 ## PSF Deconvolution ##
-#psf_171_a14 = psf(m_171_a14.wavelength)
+psf_171_a14 = psf(m_171_a14.wavelength)
+psf_335_a14 = psf(m_335_a14.wavelength)
 
-#8: plt.imshow(psf_171, origin='lower', norm=ImageNormalize(vmax=1e-6, stretch=LogStretch()))
-#8: plt.colorbar()
+plt.imshow(psf_171_a14, origin='lower', norm=ImageNormalize(vmax=1e-6, stretch=LogStretch()))
+plt.colorbar()
 
 #9: m_171_deconvolved = deconvolve(m_171, psf=psf_171)
 
