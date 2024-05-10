@@ -105,13 +105,13 @@ def lvl_1pt5(day, l1, l2):
     l1pt5_171.append(m_a_corrected)
     l1pt5_335.append(m_b_corrected)
 
-    print("Here is this iteration's 171: ")
-    print(l1pt5_171)
-    print("\n")
-    
-    print("Here is this iteration's 335: ")
-    print(l1pt5_335)
-    print("\n")
+    ##Checking Functionality: print("\n\n Here is this iteration's 171: ")
+    ##Checking Functionality: print(l1pt5_171)
+    ##Checking Functionality: print("\n")
+    ##Checking Functionality: 
+    ##Checking Functionality: print("Here is this iteration's 335: ")
+    ##Checking Functionality: print(l1pt5_335)
+    ##Checking Functionality: print("\n\n")
 
     # fig = plt.figure()
     # ax = fig.add_subplot(projection=m_a_corrected)
@@ -121,20 +121,22 @@ def lvl_1pt5(day, l1, l2):
 
     return
 
+print(l1pt5_171)
 
 for i in dates:
     lvl_1pt5(i, lambda_a, lambda_b)
 
-
-print("\nDone!\n ")
-
-print("Here is 171: ")
 print(l1pt5_171)
-print("\n")
 
-print("Here is 335: ")
-print(l1pt5_335)
-print("\n")
+##Check Extra: print("\nDone!\n ")
+##Check Extra: 
+##Check Extra: print("Here is 171: ")
+##Check Extra: print(l1pt5_171)
+##Check Extra: print("\n")
+##Check Extra: 
+##Check Extra: print("Here is 335: ")
+##Check Extra: print(l1pt5_335)
+##Check Extra: print("\n")
 
 
 # ###################################
