@@ -1,6 +1,11 @@
 ### Website version: https://sunpy.org/posts/2022/2022-01-06-aiapy-demo/#Wavelength-Response-Functions ###
 
 ## aiapy: A SunPy affiliated package for analyzing data from the Atmospheric Imaging Assembly ##
+
+###################################
+## Importing all needed packages &
+## Outputting the current versions 
+## of astropy, sunpy, and aiapy
 import astropy
 import astropy.units as u
 from astropy.coordinates import SkyCoord
@@ -29,6 +34,9 @@ print(f'astropy v{astropy.__version__}')
 print(f'sunpy v{sunpy.__version__}')
 print(f'aiapy v{aiapy.__version__}')
 
+
+
+###################################
 ## Obtaining AIA Data ##
 t_start = parse_time('2024-04-14T22:45:09')
 search_results = Fido.search(
@@ -42,6 +50,7 @@ files = Fido.fetch(search_results, max_conn=1)
 
 m_171_a14, m_335_a14 = sunpy.map.Map(sorted(files))
 
+###################################
 ## PSF Deconvolution ##
 psf_171_a14 = psf(m_171_a14.wavelength)
 psf_335_a14 = psf(m_335_a14.wavelength)
@@ -53,19 +62,21 @@ m_335_a14_deconvolved = deconvolve(m_335_a14, psf=psf_335_a14)
 m_171_a14_respiked = respike(m_171_a14)
 m_335_a14_respiked = respike(m_335_a14)
 
-## Transforming LVL 1 Images to LVL 1.5
-m_171_a14_up = update_pointing(m_171_a14)
-m_335_a14_up = update_pointing(m_335_a14)
-
-m_171_a14_L15 = register(m_171_a14_up)
-m_335_a14_L15 = register(m_335_a14_up)
+###################################
+## Transforming LVL 1 Images to LVL
+## 1.5
+## prep() Updates the pointing and 
+## registers the images in one step
 
 def prep(smap):
     return register(update_pointing(smap))
 
+m_171_a14_L15 = prep(m_171_a14)
 m_335_a14_L15 = prep(m_335_a14)
 
+###################################
 ## Degrading Correction ##
+## Extra Corrections Begin
 t_begin = parse_time('2010-03-25T00:00:00')
 now = astropy.time.Time.now()
 time_window = t_begin + np.arange(0, (now - t_begin).to(u.day).value, 7) * u.day
@@ -87,6 +98,9 @@ m_171_a14_corrected.plot(axes=ax)
 plt.colorbar()
 plt.show()
 
+###################################
+# Creates a sequencing variable, 
+# and sets which images are going to be sequenced
 map_seq = sunpy.map.Map([m_171_a14_corrected, m_335_a14_corrected], sequence=True)  
 ani = map_seq.plot()   
 plt.show()
