@@ -121,12 +121,38 @@ def lvl_1pt5(day, l1, l2):
 
     return
 
+###################################
+## Prints the 171 and 335 lists
+## This should be empty... should...
 print(l1pt5_171)
+print(l1pt5_335)
 
+###################################
+## Iterates through the list of 
+## necessary dates and runs the 
+## function to prepare the lvl 1.5
+## images 
 for i in dates:
     lvl_1pt5(i, lambda_a, lambda_b)
 
-print(l1pt5_171)
+
+
+###################################
+# Creates a sequencing variable, 
+# and sets which images are going to be sequenced
+map_seq = sunpy.map.Map(l1pt5_171, sequence=True)  
+ani = map_seq.plot()   
+plt.show()
+
+###################################
+# Creates a sequencing variable, 
+# and sets which images are going to be sequenced
+map_seq = sunpy.map.Map(l1pt5_335, sequence=True)  
+ani = map_seq.plot()   
+plt.show()
+
+
+
 
 ##Check Extra: print("\nDone!\n ")
 ##Check Extra: 
@@ -139,9 +165,3 @@ print(l1pt5_171)
 ##Check Extra: print("\n")
 
 
-# ###################################
-# # Creates a sequencing variable, 
-# # and sets which images are going to be sequenced
-# map_seq = sunpy.map.Map([m_a_corrected, m_b_corrected], sequence=True)  
-# ani = map_seq.plot()   
-# plt.show()
