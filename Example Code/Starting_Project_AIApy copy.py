@@ -103,11 +103,14 @@ def lvl_1pt5(day, l1, l2):
     m_b_corrected = correct_degradation(m_b, correction_table=correction_table)
 
     l1pt5_171.append(m_a_corrected)
-    l1pt5_335.append(m_b_corrected)
+    print("\n171 Image Appended\n")
 
-    print("\n\n Here is this iteration's 171: ")
-    print(l1pt5_171)
-    print("\n")
+    l1pt5_335.append(m_b_corrected)
+    print("\n335 Image Appended\n")
+
+    ##Checking Functionality: print("\n\n Here is this iteration's 171: ")
+    ##Checking Functionality: print(m_a_corrected)
+    ##Checking Functionality: print("\n")
     ##Checking Functionality: 
     ##Checking Functionality: print("Here is this iteration's 335: ")
     ##Checking Functionality: print(l1pt5_335)
@@ -138,12 +141,12 @@ for i in dates:
 print("Finished Now")
 
 
-#: ###################################
-#: # Creates a sequencing variable, 
-#: # and sets which images are going to be sequenced
-#: map_seq = sunpy.map.Map(l1pt5_171, sequence=True)  
-#: ani = map_seq.plot()   
-#: plt.show()
+###################################
+# Creates a sequencing variable, 
+# and sets which images are going to be sequenced
+map_seq = sunpy.map.Map(l1pt5_171, sequence=True)  
+ani = map_seq.plot()   
+plt.show()
 
 ###################################
 # Creates a sequencing variable, 
