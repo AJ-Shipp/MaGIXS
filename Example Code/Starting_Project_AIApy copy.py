@@ -145,14 +145,14 @@ print("Finished Now")
 # Creates a sequencing variable, 
 # and sets which images are going to be sequenced
 map_seq = sunpy.map.Map(l1pt5_171, sequence=True)  
-ani = map_seq.plot()   
+ani = map_seq.plot(interval=1000)   
 plt.show()
 
 ###################################
 # Creates a sequencing variable, 
 # and sets which images are going to be sequenced
 map_seq = sunpy.map.Map(l1pt5_335, sequence=True)  
-ani = map_seq.plot()   
+ani = map_seq.plot(interval=1000)   
 plt.show()
 
 
