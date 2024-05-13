@@ -34,6 +34,9 @@ print(f'astropy v{astropy.__version__}')
 print(f'sunpy v{sunpy.__version__}')
 print(f'aiapy v{aiapy.__version__}')
 
+# Counter for the for-loop
+num = 1
+
 # Date
 time = '2024-04-14T22:45:09'
 # Wavelengths
@@ -137,23 +140,29 @@ print(l1pt5_335)
 ## images 
 for i in dates:
     lvl_1pt5(i, lambda_a, lambda_b)
+    print("Iteration #", num,  " finished")
+    num = num + 1
 
 print("Finished Now")
 
-
 ###################################
-# Creates a sequencing variable, 
-# and sets which images are going to be sequenced
-map_seq = sunpy.map.Map(l1pt5_171, sequence=True)  
-ani = map_seq.plot(interval=1000)   
-plt.show()
+## Writes to a file
+sunpy.io.ana.write(filename = "171_Data", data = l1pt5_171)
+sunpy.io.ana.write(filename = "335_Data", data = l1pt5_335)
 
-###################################
-# Creates a sequencing variable, 
-# and sets which images are going to be sequenced
-map_seq = sunpy.map.Map(l1pt5_335, sequence=True)  
-ani = map_seq.plot(interval=1000)   
-plt.show()
+#: ###################################
+#: # Creates a sequencing variable, 
+#: # and sets which images are going to be sequenced
+#: map_seq = sunpy.map.Map(l1pt5_171, sequence=True)  
+#: ani = map_seq.plot(interval=1000)   
+#: plt.show()
+#: 
+#: ###################################
+#: # Creates a sequencing variable, 
+#: # and sets which images are going to be sequenced
+#: map_seq = sunpy.map.Map(l1pt5_335, sequence=True)  
+#: ani = map_seq.plot(interval=1000)   
+#: plt.show()
 
 
 
