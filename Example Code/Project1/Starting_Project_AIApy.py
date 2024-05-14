@@ -162,7 +162,7 @@ print("Finished Now")
 # Also saves the sequence to a file
 map_seq = sunpy.map.Map(l1pt5_171, sequence=True)  
 ani = map_seq.plot(interval=1000)
-#plt.show()
+plt.show()
 
 ###################################
 # Creates a sequencing variable,
@@ -171,7 +171,7 @@ ani = map_seq.plot(interval=1000)
 # Also saves the sequence to a file
 map_seq = sunpy.map.Map(l1pt5_335, sequence=True)
 ani = map_seq.plot(interval=1000)
-#plt.show()
+plt.show()
 
 
 
