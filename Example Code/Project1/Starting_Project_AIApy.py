@@ -66,6 +66,10 @@ def lvl_1pt5(day, l1, l2):
 
     m_a, m_b = sunpy.map.Map(sorted(files))
 
+    print(m_a, m_b)
+
+    input("Press Enter to continue.")
+
     ###################################
     ## PSF Deconvolution ##
     psf_a = psf(m_a.wavelength)
