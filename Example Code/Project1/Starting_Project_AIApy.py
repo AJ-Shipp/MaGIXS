@@ -111,9 +111,10 @@ def lvl_1pt5(day, l1, l2):
     l1pt5_335.append(m_b_corrected)
     print("335 Image Appended\n")
 
-    m_a_corrected.save(("aia171_"+str(num)+".fits"),overwrite=True)
-    m_b_corrected.save(("aia335_"+str(num)+".fits"),overwrite=True)
-
+    ###################################
+    ## Saving Files: m_a_corrected.save(("aia171_"+str(num)+".fits"),overwrite=True)
+    ## Saving Files: m_b_corrected.save(("aia335_"+str(num)+".fits"),overwrite=True)
+    
     ###################################
     ## Prints to the console the 171A 
     ## and 335A data after each 
