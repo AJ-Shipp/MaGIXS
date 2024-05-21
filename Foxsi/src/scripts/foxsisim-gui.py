@@ -5,7 +5,7 @@ Created on Aug 1, 2011
 @author: rtaylor
 '''
 import sys
-from PyQt4 import QtGui
+from PyQt5 import QtGui
 from foxsisim_gui.mainwindow import MainWindow
 
 if __name__ == "__main__":
