@@ -5,8 +5,8 @@ http://matplotlib.sourceforge.net/examples/user_interfaces/embedding_in_qt4.html
 
 @author: rtaylor
 '''
-from PyQt4 import QtGui
-from matplotlib.backends.backend_qt4agg import FigureCanvasQTAgg as FigureCanvas
+from PyQt5 import QtGui
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 class MplCanvas(FigureCanvas):

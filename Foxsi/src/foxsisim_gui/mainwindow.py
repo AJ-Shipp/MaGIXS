@@ -3,8 +3,8 @@ Created on Aug 1, 2011
 
 @author: rtaylor
 '''
-from PyQt4.QtCore import * #@UnusedWildImport
-from PyQt4.QtGui import * #@UnusedWildImport
+from PyQt5.QtCore import * #@UnusedWildImport
+from PyQt5.QtGui import * #@UnusedWildImport
 from ui_mainwindow import Ui_MainWindow
 from mlpcanvas import MplCanvas
 from simthread import SimThread
