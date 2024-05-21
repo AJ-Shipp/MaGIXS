@@ -32,7 +32,7 @@ if __name__ == '__main__':
     rays = source.generateRays(module.targetFront, nrays)
 
     plt.figure()
-    plt.hist([ray.energy for ray in rays], normed=True, label='generated rays')
+    plt.hist([ray.energy for ray in rays], label='generated rays')
     plt.legend()
     plt.show()
 
