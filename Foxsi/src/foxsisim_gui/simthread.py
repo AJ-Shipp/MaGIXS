@@ -3,7 +3,7 @@ Created on Aug 14, 2011
 
 @author: rtaylor
 '''
-from PyQt5.QtCore import QThread, SIGNAL
+from PyQt4.QtCore import QThread, SIGNAL
 
 class SimThread(QThread):
     '''
