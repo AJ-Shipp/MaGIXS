@@ -12,6 +12,7 @@ Created on Aug 15, 2011
 from foxsisim.module import Module
 from foxsisim.plotting import get3dAxes
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 if __name__ == '__main__':
 
@@ -31,6 +32,7 @@ if __name__ == '__main__':
     # generate 3d representation
     fig2 = plt.figure(figsize=(5, 5))
     axes2 = get3dAxes(fig2)
+    plt.axes(axes2)
     module.plot3D(axes2, 'b')
 
     # show figures
