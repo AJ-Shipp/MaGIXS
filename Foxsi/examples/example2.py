@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # create scatter plot
     detectorRays = detector.rays
     fig2 = plt.figure(figsize=(5,5))
-    scatterHist(detectorRays,fig2)
+    scatterHist(detectorRays,fig2, binwidth=0.00000000001) #binwidth = 1E-11
 
     # show
     plt.show()
