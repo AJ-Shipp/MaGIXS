@@ -1,0 +1,5 @@
+pip install .
+
+pyqt4topyqt5 [-h] [--nosubdir] [--followlinks] [-o O]
+             [--diff [DIFF]] [--diffs] [--nolog] [--nopyqt5]
+             path
