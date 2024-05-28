@@ -15,13 +15,14 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    # create module/detector/source objects 
+    ## Creating parameters for the shell
     base1 = [0,1,0]
     focalLength = 200.0
     segmentLength = 30.0
     radii = [5.15100]
     angle = 0.00643732691573
 
+    ## Initialization of the module, detector, source, and shell
     #: module = Module(seglen=segmentLength, focal=focalLength, radii=radii, conic=True, core_radius=2.856)
     detector = Detector()
     source = Source()
