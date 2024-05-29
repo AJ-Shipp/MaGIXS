@@ -15,18 +15,71 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
+    ## Parameters for the detector
+    cntr=[0, 0, 230] #Base is [0,0,230] in cm
+    hght = 10 #Base is 2[cm]
+    wdth = 10 #Base is 2[cm]
+    res = [1024,1024]
+
     ## Creating parameters for the shell
-    base1 = [0,1,0]
-    focalLength = 200.0
-    segmentLength = 30.0
+    bs1 = [0,0,0]           #[cm]
+    focalLength = 200.0     #[cm]
+    sLength = 30.0          #[cm]
     radii = [5.15100]
     angle = 0.00643732691573
 
     ## Initialization of the module, detector, source, and shell
-    #: module = Module(seglen=segmentLength, focal=focalLength, radii=radii, conic=True, core_radius=2.856)
-    detector = Detector()
+    #: module = Module(base=[0, 0, 0], seglen=30.0, focal=200.0, radii=[5.151], angles=None,
+    #:              conic=True, shield=True, core_radius=None)
+    """
+    Parameters:
+            base:       the center point of the wide end of the segment
+            seglen:     the axial length of each segment
+            focal:      the focal length, measured from the center of the module
+            radii:      a list of radii, one for each shell from biggest to
+                        smallest
+            angles:     optional parameter to overwrite the shell angles computed
+                        by constructor
+            conic:      if True, use a conic approximation to the Wolter-I parabola-hyperbola.
+            shield:       if True, create a shield at the core of the optic to block straight-thru
+                        flux.
+            core_radius If shield is True then use this value for the shield radius
+    """
+    detector = Detector(center=cntr, height=hght, width=wdth, reso=res)
+    """
+    Parameters:
+            center:    the center location of the detector
+            width:     the width of the projection rectangle
+            height:    the height of the projection rectangle
+            normal:    direction the projection rectangle is facing
+            reso:      resolution of pixels (W,H)
+            pixels:    optional numpy array to hold pixel colors (W x H x 3)
+            freqs:     optional array to count the number of times a pixel is
+                       hit (W x H)
+    """
     source = Source()
-    shell = Shell(base=base1, seglen=segmentLength, conic=True)
+    """
+    Parameters:
+            center:    the center location of the source
+            width:     the width of the projection rectangle (atinf or nonpoint)
+            height:    the height of the projection rectangle (atinf or nonpoint)
+            normal:    direction the projection rectangle is facing
+            type:      'atinf', 'point', or 'nonpoint'
+            color:     color of projected rays
+            pixels:    optional numpy array of pixel colors (W x H x 3)
+            spectrum:  optional numpy array (2xN) of energy spectrum
+            tag : 'Source' Tag all rays with 'Source', place where the came from.
+    """
+    shell = Shell(base=bs1, seglen=sLength, conic=True)
+    """
+    Parameters:
+            base:    the center point of the wide end of the segment
+            focal:   the focal length, measured from the center of the module
+            seglen:  the axial length of each segment
+            ang:     angle between the shell axis and the side of the front
+                     segment
+            r:       radius of the shell where the two segments meet    
+    """
     
     # creating a 3D image of the shell to verify its creation
     #: fig2 = plt.figure(figsize=(5, 5))
@@ -35,6 +88,7 @@ if __name__ == '__main__':
     #: shell.plot3D(axes2, 'b')
 
     # generate 5000 rays at source
+    #: rays = source.generateRays(module.targetFront, 5000)
     rays = source.generateRays(shell.targetFront, 5000)
 
     # pass rays through shell
@@ -74,8 +128,8 @@ if __name__ == '__main__':
 
     # create scatter plot
     detectorRays = detector.rays
-    fig = plt.figure(figsize=(5,5))
-    scatterHist(detectorRays, fig, binwidth=0.001) #binwidth = 1E-11
+    fig = plt.figure(figsize=(5,5), dpi=100) #Default values of 'figsize=(5,5), dpi=100'
+    scatterHist(detectorRays, fig, binwidth=0.05) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
 
     # show
     plt.show()
