@@ -16,15 +16,15 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
 
     ## Parameters for the detector
-    cntr=[0, 0, 230] #Base is [0,0,230] in cm
-    hght = 10 #Base is 2[cm]
-    wdth = 10 #Base is 2[cm]
-    res = [1024,1024]
+    cntr=[0, 0, 230]            #Base is [0,0,230] in cm
+    hght = 10                   #Base is 2[cm]
+    wdth = 10                   #Base is 2[cm]
+    res = [1024,1024]           #Base is [256, 256]
 
     ## Creating parameters for the shell
-    bs1 = [0,0,0]           #[cm]
-    focalLength = 200.0     #[cm]
-    sLength = 30.0          #[cm]
+    bs1 = [0,0,0]               #[cm]
+    focalLength = 200.0         #[cm]
+    sLength = 30.0              #[cm]
     radii = [5.15100]
     angle = 0.00643732691573
 
