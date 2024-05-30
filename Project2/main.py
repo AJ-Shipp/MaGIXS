@@ -107,7 +107,8 @@ if __name__ == '__main__':
             
             # if ray hits reflective surface
             if sol is not None:
-                
+                ray.plot3D(axes2, 'b')          #Plots the rays' initial position
+
                 # update ray
                 ray.pos = ray.getPoint(sol[2])
                 ray.bounces += 1
@@ -115,10 +116,14 @@ if __name__ == '__main__':
                 # if reflected
                 if x is not None:
                     ray.ori = x / norm(x) # update ori to unit vector reflection
+                    ray.plot3D(axes2, 'b')      #Plots the rays' position after reflection
+
                 # otherwise, no reflection means ray is dead
                 else:
                     ray.dead = True 
                     break
+                #: print(ray.ori)               #Prints the rays' origin
+                #: print(ray.pos)               #Prints the rays' position
                 
             else: break
 
