@@ -16,10 +16,10 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
 
     ## Parameters for the detector
-    cntr=[0, 0, 230]            #Base is [0,0,230] in cm
-    hght = 10                   #Base is 2[cm]
-    wdth = 10                   #Base is 2[cm]
-    res = [1024,1024]           #Base is [256, 256]
+    cntr=[2, 2, 230]            #Base is [0,0,230] in cm
+    hght = 2                   #Base is 2[cm]
+    wdth = 2                   #Base is 2[cm]
+    res = [512,512]           #Base is [256, 256]
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
@@ -82,10 +82,12 @@ if __name__ == '__main__':
     """
     
     # creating a 3D image of the shell to verify its creation
-    #: fig2 = plt.figure(figsize=(5, 5))
-    #: axes2 = get3dAxes(fig2)
-    #: plt.axes(axes2)
-    #: shell.plot3D(axes2, 'b')
+    fig2 = plt.figure(figsize=(5, 5))
+    axes2 = get3dAxes(fig2)
+    plt.axes(axes2)
+    shell.plot3D(axes2, 'b')
+    source.plot3D(axes2, 'b')
+    detector.plot3D(axes2, 'b')
 
     # generate 5000 rays at source
     #: rays = source.generateRays(module.targetFront, 5000)
@@ -128,7 +130,7 @@ if __name__ == '__main__':
 
     # create scatter plot
     detectorRays = detector.rays
-    fig = plt.figure(figsize=(5,5), dpi=100) #Default values of 'figsize=(5,5), dpi=100'
+    fig = plt.figure(figsize=(50,50), dpi=100) #Default values of 'figsize=(5,5), dpi=100'
     scatterHist(detectorRays, fig, binwidth=0.05) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
 
     # show
