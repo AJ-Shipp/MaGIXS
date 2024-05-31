@@ -69,47 +69,5 @@ plt.show()
 ## 3 Task
 
 #loadtxt(RecentIndices.txt)
-f = open('C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/REU2024_Tutorials/Python_Tutorial_1/RecentIndices.txt', 'r')
-file = f.readlines()
-
-a = np.array(file)
-b = str(np.array(a[25]))
-print(a[25])
-print(b[0:4])
-
-"""
-newFile = np.array([])
-for i in a:
-    if i[0] == '1' or '2':
-        currentNum = ''
-        for j in i:
-            if i[j] == ('1' or '2' or '3' or '4' or '5' or '6' or '7' or '8' or '9' or '0'):
-                currentNum = currentNum + i[j]
-                if i[j] != ' ' and i[j] != ' ':
-                    newFile.append(int(currentNum))
-            else:
-                break
-    else:
-        break
-
-new = []
-for i in file: 
-    strt = str(i)
-    set = 0
-    for j in strt:
-            #idk
-        if strt[j] == '#':
-            break
-        if strt[j] == ' ':
-            break
-        if strt[j] != '1' or '2' or '3' or '4' or '5' or '6' or '7' or '8' or '9' or '0':
-            break
-        else: set.append(int(strt[j])) 
-"""
-
-print(file[25:26])
-"""
-The first line of data starts on line 25
-"""
-
-f.close()
+test = genfromtxt('C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/REU2024_Tutorials/Python_Tutorial_1/RecentIndices.txt')
+print(test, "\n", test[0,0])
