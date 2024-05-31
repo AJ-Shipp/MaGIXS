@@ -1,6 +1,6 @@
 import numpy as np
 from numpy import *
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 ## 1.1 Scalar Variables
 """
@@ -71,3 +71,33 @@ plt.show()
 #loadtxt(RecentIndices.txt)
 test = genfromtxt('C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/REU2024_Tutorials/Python_Tutorial_1/RecentIndices.txt')
 print(test, "\n", test[0,0])
+
+timeY = []
+timeM = []
+timeC = []
+spotNum = []
+radResp = []
+obsAP = []
+k = 0
+for i in test:
+    print(i)
+    timeY.append(test[k,0])
+    timeM.append(test[k,1])
+    spotNum.append(test[k,2])
+    radResp.append(test[k,7])
+    obsAP.append(test[k,9])
+    print(timeY, timeM, '\n')
+    k = k+1
+
+fig, ax = plt.subplots()
+ax.plot(timeY, spotNum)
+plt.show()
+
+
+"""
+C1: Year
+C2: Month
+C3: Sunspot Number
+C8: Observed Radio Response
+C10: Observed AP Index
+"""
