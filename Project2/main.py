@@ -29,8 +29,8 @@ if __name__ == '__main__':
     angle = 0.00643732691573
 
     ## Initialization of the module, detector, source, and shell
-    #: module = Module(base=[0, 0, 0], seglen=30.0, focal=200.0, radii=[5.151], angles=None,
-    #:              conic=True, shield=True, core_radius=None)
+    module = Module(base=[0, 0, 0], seglen=30.0, focal=200.0, radii=[5.151], angles=None,
+                 conic=True, shield=True, core_radius=None)
     """
     Parameters:
             base:       the center point of the wide end of the segment
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     fig2 = plt.figure(figsize=(5, 5))
     axes2 = get3dAxes(fig2)
     plt.axes(axes2)
-    shell.plot3D(axes2, 'b')
+    module.plot3D(axes2, 'b')
     source.plot3D(axes2, 'b')
     detector.plot3D(axes2, 'b')
 
@@ -97,7 +97,7 @@ if __name__ == '__main__':
     surfaces = shell.getSurfaces() # each shell has two segments
     for ray in rays:
         while True:
-            
+            ray.plot3D(axes2, 'k')              #Plots all rays that are created
             sol = None
             for surface in surfaces:
                 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
             
             # if ray hits reflective surface
             if sol is not None:
-                ray.plot3D(axes2, 'b')          #Plots the rays' initial position
+                ray.plot3D(axes2, 'g')          #Plots the rays that will hit the module's initial position
 
                 # update ray
                 ray.pos = ray.getPoint(sol[2])
@@ -116,7 +116,7 @@ if __name__ == '__main__':
                 # if reflected
                 if x is not None:
                     ray.ori = x / norm(x) # update ori to unit vector reflection
-                    ray.plot3D(axes2, 'b')      #Plots the rays' position after reflection
+                    ray.plot3D(axes2, 'r')      #Plots the rays' position after reflection on the module
 
                 # otherwise, no reflection means ray is dead
                 else:
