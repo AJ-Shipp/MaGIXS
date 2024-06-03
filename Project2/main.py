@@ -16,10 +16,10 @@ import matplotlib.pyplot as plt
 if __name__ == '__main__':
 
     ## Parameters for the detector
-    cntr=[2, 2, 230]            #Base is [0,0,230] in cm
+    cntr=[0, 0, 235]            #Base is [0,0,230] in cm
     hght = 2                   #Base is 2[cm]
     wdth = 2                   #Base is 2[cm]
-    res = [512,512]           #Base is [256, 256]
+    res = [256,256]           #Base is [256, 256]
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
@@ -90,14 +90,14 @@ if __name__ == '__main__':
     detector.plot3D(axes2, 'b')
 
     # generate 5000 rays at source
-    #: rays = source.generateRays(module.targetFront, 5000)
-    rays = source.generateRays(shell.targetFront, 5000)
+    rays = source.generateRays(module.targetFront, 5000)
+    #: rays = source.generateRays(shell.targetFront, 5000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
     for ray in rays:
         while True:
-            ray.plot3D(axes2, 'k')              #Plots all rays that are created
+            #: ray.plot3D(axes2, 'k')              #Plots all rays that are created
             sol = None
             for surface in surfaces:
                 
@@ -107,7 +107,7 @@ if __name__ == '__main__':
             
             # if ray hits reflective surface
             if sol is not None:
-                ray.plot3D(axes2, 'g')          #Plots the rays that will hit the module's initial position
+                #: ray.plot3D(axes2, 'k')          #Plots the rays that will hit the module's initial position
 
                 # update ray
                 ray.pos = ray.getPoint(sol[2])
@@ -116,11 +116,12 @@ if __name__ == '__main__':
                 # if reflected
                 if x is not None:
                     ray.ori = x / norm(x) # update ori to unit vector reflection
-                    ray.plot3D(axes2, 'r')      #Plots the rays' position after reflection on the module
+                    ray.plot3D(axes2, 'g')      #Plots the rays' position after reflection on the module
 
                 # otherwise, no reflection means ray is dead
                 else:
                     ray.dead = True 
+                    ray.plot3D(axes2, 'r')          #Plots the rays that will hit the module's initial position
                     break
                 #: print(ray.ori)               #Prints the rays' origin
                 #: print(ray.pos)               #Prints the rays' position
