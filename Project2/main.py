@@ -15,12 +15,6 @@ import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
 
-    ## Parameters for the detector
-    cntr=[0, 0, 235]            #Base is [0,0,230] in cm
-    hght = 2                   #Base is 2[cm]
-    wdth = 2                   #Base is 2[cm]
-    res = [256,256]           #Base is [256, 256]
-
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
     focalLength = 200.0         #[cm]
@@ -45,7 +39,7 @@ if __name__ == '__main__':
                         flux.
             core_radius If shield is True then use this value for the shield radius
     """
-    detector = Detector(center=cntr, height=hght, width=wdth, reso=res)
+    detector = Detector(center=[2,2,235], height=10, width=10, reso=[512,512])
     """
     Parameters:
             center:    the center location of the detector
@@ -136,7 +130,7 @@ if __name__ == '__main__':
 
     # create scatter plot
     detectorRays = detector.rays
-    fig = plt.figure(figsize=(5,5), dpi=100) #Default values of 'figsize=(5,5), dpi=100'
+    fig = plt.figure(dpi=100) #Default values of 'figsize=(5,5), dpi=100'
     scatterHist(detectorRays, fig, binwidth=0.05) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
 
     # show
