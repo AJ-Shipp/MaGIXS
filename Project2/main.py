@@ -39,7 +39,7 @@ if __name__ == '__main__':
                         flux.
             core_radius If shield is True then use this value for the shield radius
     """
-    detector = Detector(center=[2,2,235], height=10, width=10, reso=[512,512])
+    detector = Detector(center=[0,0,230], height=1.5, width=3, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -51,7 +51,16 @@ if __name__ == '__main__':
             freqs:     optional array to count the number of times a pixel is
                        hit (W x H)
     """
-    source = Source()
+
+    ## Creating the parameters for the source
+    arcmins = -5.0
+    def arc2cm(input):
+        output = input*0.0290888209/10
+        return output 
+    centi = arc2cm(arcmins)
+    print(arcmins,"",centi)
+
+    source = Source(center=(centi,centi,-10), normal=(centi,centi,1))
     """
     Parameters:
             center:    the center location of the source
@@ -110,17 +119,23 @@ if __name__ == '__main__':
                 # if reflected
                 if x is not None:
                     ray.ori = x / norm(x) # update ori to unit vector reflection
-                    ray.plot3D(axes2, 'g')      #Plots the rays' position after reflection on the module
+                    #: ray.plot3D(axes2, 'g')      #Plots the rays' position after reflection on the module
 
                 # otherwise, no reflection means ray is dead
                 else:
                     ray.dead = True 
-                    ray.plot3D(axes2, 'r')          #Plots the rays that will hit the module's initial position
+                    #: ray.plot3D(axes2, 'r')          #Plots the rays that will hit the module's initial position
                     break
                 #: print(ray.ori)               #Prints the rays' origin
                 #: print(ray.pos)               #Prints the rays' position
-                
+            
             else: break
+        if ray.bounces > 2:
+            ray.plot3D(axes2, 'g')
+        elif ray.bounces == 1:
+            ray.plot3D(axes2, 'r')
+        if ray.bounces == 0:
+            ray.dead = True
 
     # catch rays at detector
     detector.catchRays(rays)
@@ -130,7 +145,7 @@ if __name__ == '__main__':
 
     # create scatter plot
     detectorRays = detector.rays
-    fig = plt.figure(dpi=100) #Default values of 'figsize=(5,5), dpi=100'
+    fig = plt.figure(figsize=(5,5), dpi=100) #Default values of 'figsize=(5,5), dpi=100'
     scatterHist(detectorRays, fig, binwidth=0.05) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
 
     # show
