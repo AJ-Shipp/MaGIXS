@@ -40,7 +40,7 @@ if __name__ == '__main__':
                         flux.
             core_radius If shield is True then use this value for the shield radius
     """
-    detector = Detector(center=[0,0,230], height=1.5, width=3, reso=[1024,2048])
+    detector = Detector(center=[0,0,230], height=3, width=3, reso=[2048,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -57,15 +57,15 @@ if __name__ == '__main__':
 
     ##Spherical (r, theta, phi) to Cartesian
     ## r = c
-    r = 10 #[cm]
-    theta = 0/60                    #Deg/60 = x'
-    phi = 0/60                      #Deg/60 = x'
+    r = 200 #[cm]
+    theta = 32/60/60                    #Deg/60/60 = x'
+    phi = 32/60/60                      #Deg/60/60 = x'
     x_coord = r*np.sin(theta)*np.cos(phi)
     y_coord = r*np.sin(theta)*np.sin(phi)
     z_coord = r*np.cos(theta)
     z_ang = r*np.cos(theta)/r
 
-    source = Source(center=(x_coord,y_coord,-z_coord), normal=(x_coord,y_coord,z_ang))
+    source = Source(center=(x_coord,x_coord,-z_coord), normal=(-x_coord,-x_coord,z_coord))
     """
     Parameters:
             center:    the center location of the source
@@ -98,14 +98,14 @@ if __name__ == '__main__':
     detector.plot3D(axes2, 'b')
 
     # generate 5000 rays at source
-    rays = source.generateRays(module.targetFront, 5000)
+    rays = source.generateRays(module.targetFront, 50000)
     #: rays = source.generateRays(shell.targetFront, 5000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
     for ray in rays:
         while True:
-            ray.plot3D(axes2, 'k')              #Plots all rays that are created
+            #: ray.plot3D(axes2, 'k')              #Plots all rays that are created
             sol = None
             for surface in surfaces:
                 
@@ -150,7 +150,7 @@ if __name__ == '__main__':
 
     # create scatter plot
     detectorRays = detector.rays
-    fig = plt.figure(figsize=(5,5), dpi=100) #Default values of 'figsize=(5,5), dpi=100'
+    fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
     scatterHist(detectorRays, fig, binwidth=0.05) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
 
     # show
