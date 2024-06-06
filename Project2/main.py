@@ -10,6 +10,7 @@ from foxsisim.source import Source
 from foxsisim.mymath import reflect
 from numpy.linalg import norm
 from foxsisim.plotting import scatterHist, get3dAxes, plot
+import numpy as np
 
 import matplotlib.pyplot as plt
 
@@ -53,14 +54,18 @@ if __name__ == '__main__':
     """
 
     ## Creating the parameters for the source
-    arcmins = -5.0
-    def arc2cm(input):
-        output = input*0.0290888209/10
-        return output 
-    centi = arc2cm(arcmins)
-    print(arcmins,"",centi)
 
-    source = Source(center=(centi,centi,-10), normal=(centi,centi,1))
+    ##Spherical (r, theta, phi) to Cartesian
+    ## r = c
+    r = 10 #[cm]
+    theta = 0/60                    #Deg/60 = x'
+    phi = 0/60                      #Deg/60 = x'
+    x_coord = r*np.sin(theta)*np.cos(phi)
+    y_coord = r*np.sin(theta)*np.sin(phi)
+    z_coord = r*np.cos(theta)
+    z_ang = r*np.cos(theta)/r
+
+    source = Source(center=(x_coord,y_coord,-z_coord), normal=(x_coord,y_coord,z_ang))
     """
     Parameters:
             center:    the center location of the source
@@ -100,7 +105,7 @@ if __name__ == '__main__':
     surfaces = shell.getSurfaces() # each shell has two segments
     for ray in rays:
         while True:
-            #: ray.plot3D(axes2, 'k')              #Plots all rays that are created
+            ray.plot3D(axes2, 'k')              #Plots all rays that are created
             sol = None
             for surface in surfaces:
                 
