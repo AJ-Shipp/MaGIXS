@@ -40,7 +40,7 @@ if __name__ == '__main__':
                         flux.
             core_radius If shield is True then use this value for the shield radius
     """
-    detector = Detector(center=[0,0,230], height=3, width=3, reso=[2048,2048])
+    detector = Detector(center=[0,0,230], height=1.5, width=3, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -58,8 +58,8 @@ if __name__ == '__main__':
     ##Spherical (r, theta, phi) to Cartesian
     ## r = c
     r = 200 #[cm]
-    theta = 32/60/60                    #Deg/60/60 = x'
-    phi = 32/60/60                      #Deg/60/60 = x'
+    theta = 0/60/60                    #Deg/60/60 = x'
+    phi = 0/60/60                      #Deg/60/60 = x'
     x_coord = r*np.sin(theta)*np.cos(phi)
     y_coord = r*np.sin(theta)*np.sin(phi)
     z_coord = r*np.cos(theta)
@@ -99,7 +99,6 @@ if __name__ == '__main__':
 
     # generate 5000 rays at source
     rays = source.generateRays(module.targetFront, 50000)
-    #: rays = source.generateRays(shell.targetFront, 5000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
@@ -141,6 +140,8 @@ if __name__ == '__main__':
             ray.plot3D(axes2, 'r')
         if ray.bounces == 0:
             ray.dead = True
+        if ray.num % 5000 == 0:
+            print(ray.num, "rays passed")
 
     # catch rays at detector
     detector.catchRays(rays)
