@@ -148,6 +148,7 @@ if __name__ == '__main__':
 
     ## plot detector pixels
     plot(detector)
+    plt.gca().invert_yaxis()
 
     # create scatter plot
     detectorRays = detector.rays
