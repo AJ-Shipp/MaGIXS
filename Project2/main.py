@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     ## Initialization of the module, detector, source, and shell
     module = Module(base=[0, 0, 0], seglen=30.0, focal=200.0, radii=[5.151], angles=None,
-                 conic=True, shield=True, core_radius=None)
+                 conic=True, shield=True, core_radius=0)
     """
     Parameters:
             base:       the center point of the wide end of the segment
@@ -61,9 +61,9 @@ if __name__ == '__main__':
     r = 200 #[cm]
     theta = 0/60/60                    #Deg/60/60 = x'
     phi = 0/60/60                      #Deg/60/60 = x'
-    x_coord = r*np.sin(theta)*np.cos(phi)
-    y_coord = r*np.sin(theta)*np.sin(phi)
-    z_coord = r*np.cos(theta)
+    x_coord = r*np.sin(phi)*np.cos(theta)
+    y_coord = r*np.sin(phi)*np.sin(theta)
+    z_coord = r*np.cos(phi)
     z_ang = r*np.cos(theta)/r
 
     source = Source(center=(x_coord,x_coord,-z_coord), normal=(-x_coord,-x_coord,z_coord))
@@ -98,11 +98,17 @@ if __name__ == '__main__':
     source.plot3D(axes2, 'b')
     detector.plot3D(axes2, 'b')
 
-    # generate 5000 rays at source
+    # generate 50000 rays at source
     rays = source.generateRays(module.targetFront, 50000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
+
+    modDims = module.getDims()
+    modR_w = modDims[0]
+    modR_s = modDims[1]
+    modL = modDims[2]
+    print(modDims[0])
 
     if passR == True:
         '''
@@ -110,6 +116,7 @@ if __name__ == '__main__':
         the module.
         '''
         # print('Module: passing ',len(rays),' rays')
+        robust = True
 
         # get all module surfaces
         allSurfaces = module.getSurfaces()
@@ -130,37 +137,107 @@ if __name__ == '__main__':
                 regions[i].extend(module.shells[i + 1].getSurfaces())
 
         for ray in rays:
+
+            # move ray to the front of the optics
+            ray.moveToZ(module.coreFaces[0].center[2])
+            
+            """
+            If the ray's x coordinate is below 0.5*module's wide end radius, or if the y coordinate 
+            is below 0*module's wide end radius, then the ray is removed  
+            """
+            if (ray.pos[0] < modR_w*0.5 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*0 or ray.pos[1] > modR_w*(3**(1/2))/2): 
+                ray.dead = True
+
+            # reset surfaces
+            surfaces = [s for s in allSurfaces]
+            firstBounce = True  # used for optimization
+
             while True:
-                sol = None
-                for surface in surfaces:
-                    
-                    # solve for intersection of ray with surface
-                    sol = surface.rayIntersect(ray)
-                    if sol is not None: break
                 
-                # if ray hits reflective surface
-                if sol is not None:
-                    
+                # find nearest ray intersection
+                bestDist = None
+                bestSol = None
+                bestSurf = None
+                for surface in surfaces:
+
+                    sol = surface.rayIntersect(ray)
+                    if sol is not None:
+                        dist = norm(ray.getPoint(sol[2]) - ray.pos)
+                        if bestDist is None or dist < bestDist:
+                            bestDist = dist
+                            bestSol = sol
+                            bestSurf = surface
+
+                # if a closest intersection was found
+                if bestSol is not None:
+
                     # update ray
-                    ray.pos = ray.getPoint(sol[2])
+                    ray.pos = ray.getPoint(bestSol[2])
+                    ray.hist.append(ray.pos)
                     ray.bounces += 1
-                    x = reflect(ray.ori,surface.getNormal(sol[0],sol[1]), None)
+                    ray.update_tag(bestSurf.tag)
+                    #print("%i ray bounce number %i" % (ray.num, ray.bounces))
+
+                    x = reflect(ray.ori,
+                                bestSurf.getNormal(bestSol[0], bestSol[1]),
+                                ray.energy)
+                    # print('x = ',x)
                     # if reflected
                     if x is not None:
-                        ray.ori = x / norm(x) # update ori to unit vector reflection
-                        
+                        # update ori to unit vector reflection
+                        ray.ori = x / norm(x)
                     # otherwise, no reflection means ray is dead
                     else:
-                        ray.dead = True 
+                        ray.dead = True
+                        # print("%i ray killed by reflect" % ray.num)
                         break
-                    #: print(ray.ori)               #Prints the rays' origin
-                    #: print(ray.pos)               #Prints the rays' position
-                
-                else: break
-            if ray.bounces > 2:
-                ray.plot3D(axes2, 'g')
-            elif ray.bounces == 1:
-                ray.plot3D(axes2, 'r')
+
+                    """
+                    If the ray is not dead, then the rays with 2 bounces are plotted with green
+                        and the rays with only 1 bounce (ghost rays) are plotted in red
+                    """
+                    if ray.dead == False:
+                        if ray.bounces == 2:
+                            ray.plot3D(axes2, 'g')
+                        elif ray.bounces == 1:
+                            ray.plot3D(axes2, 'r')
+
+                    # knowing the surface it has just hit, we can
+                    # narrow down the number of surface to test
+
+                    # remove shells the ray cannot even 'see'
+                    if firstBounce:
+                        firstBounce = False
+                        for region in regions:
+                            if bestSurf is region[0] or bestSurf is region[1]:
+                                surfaces = [s for s in region]
+                                break
+
+                    # assuming each segment can be hit no more than once
+                    # eliminate the surface from our list
+                    if not robust:
+                        surfaces.remove(bestSurf)
+
+                # if no intersection, ray can exit module
+                else:
+                    break
+                    # print(ray.hist)
+                    # print(ray.des)
+
+            sol = module.coreFaces[1].rayIntersect(ray)
+            if sol is not None:
+                print("ray hit rear blocker")
+                ray.pos = ray.getPoint(sol[2])
+                #ray.bounces += 1
+                ray.dead = True
+                ray.des = ray.pos
+                ray.hist.append(ray.pos)
+                ray.update_tag(module.coreFaces[1].tag)
+                continue
+            else:
+                ray.moveToZ(module.coreFaces[1].center[2])
+                #ray.hist.append(ray.pos)
+
             if ray.bounces == 0:
                 ray.dead = True
             if ray.num % 5000 == 0:
