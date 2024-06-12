@@ -104,7 +104,6 @@ if __name__ == '__main__':
     surfaces = shell.getSurfaces() # each shell has two segments
     for ray in rays:
         while True:
-            #: ray.plot3D(axes2, 'k')              #Plots all rays that are created
             sol = None
             for surface in surfaces:
                 
@@ -114,7 +113,6 @@ if __name__ == '__main__':
             
             # if ray hits reflective surface
             if sol is not None:
-                #: ray.plot3D(axes2, 'k')          #Plots the rays that will hit the module's initial position
 
                 # update ray
                 ray.pos = ray.getPoint(sol[2])
@@ -123,12 +121,10 @@ if __name__ == '__main__':
                 # if reflected
                 if x is not None:
                     ray.ori = x / norm(x) # update ori to unit vector reflection
-                    #: ray.plot3D(axes2, 'g')      #Plots the rays' position after reflection on the module
 
                 # otherwise, no reflection means ray is dead
                 else:
                     ray.dead = True 
-                    #: ray.plot3D(axes2, 'r')          #Plots the rays that will hit the module's initial position
                     break
                 #: print(ray.ori)               #Prints the rays' origin
                 #: print(ray.pos)               #Prints the rays' position
