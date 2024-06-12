@@ -103,46 +103,68 @@ if __name__ == '__main__':
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
-    for ray in rays:
-        while True:
-            #: ray.plot3D(axes2, 'k')              #Plots all rays that are created
-            sol = None
-            for surface in surfaces:
+
+    if passR == True:
+        '''
+        Takes an array of rays and passes them through the front end of
+        the module.
+        '''
+        # print('Module: passing ',len(rays),' rays')
+
+        # get all module surfaces
+        allSurfaces = module.getSurfaces()
+        allSurfaces.remove(module.coreFaces[0])  # we'll test these seperately
+        allSurfaces.remove(module.coreFaces[1])
+
+        # create regions consisting of adjacent shells
+        regions = [None for shell in module.shells]
+        for i, shell in enumerate(module.shells):
+            # innermost shell
+            if i == len(module.shells) - 1:
+                regions[i] = shell.getSurfaces()
+                # regions[i].append(self.core)
+            else:
+                # outer shell (reflective side facing region)
+                regions[i] = shell.getSurfaces()
+                # nested shell (non reflective)
+                regions[i].extend(module.shells[i + 1].getSurfaces())
+
+        for ray in rays:
+            while True:
+                sol = None
+                for surface in surfaces:
+                    
+                    # solve for intersection of ray with surface
+                    sol = surface.rayIntersect(ray)
+                    if sol is not None: break
                 
-                # solve for intersection of ray with surface
-                sol = surface.rayIntersect(ray)
-                if sol is not None: break
-            
-            # if ray hits reflective surface
-            if sol is not None:
-                #: ray.plot3D(axes2, 'k')          #Plots the rays that will hit the module's initial position
-
-                # update ray
-                ray.pos = ray.getPoint(sol[2])
-                ray.bounces += 1
-                x = reflect(ray.ori,surface.getNormal(sol[0],sol[1]), None)
-                # if reflected
-                if x is not None:
-                    ray.ori = x / norm(x) # update ori to unit vector reflection
-                    #: ray.plot3D(axes2, 'g')      #Plots the rays' position after reflection on the module
-
-                # otherwise, no reflection means ray is dead
-                else:
-                    ray.dead = True 
-                    #: ray.plot3D(axes2, 'r')          #Plots the rays that will hit the module's initial position
-                    break
-                #: print(ray.ori)               #Prints the rays' origin
-                #: print(ray.pos)               #Prints the rays' position
-            
-            else: break
-        if ray.bounces > 2:
-            ray.plot3D(axes2, 'g')
-        elif ray.bounces == 1:
-            ray.plot3D(axes2, 'r')
-        if ray.bounces == 0:
-            ray.dead = True
-        if ray.num % 5000 == 0:
-            print(ray.num, "rays passed")
+                # if ray hits reflective surface
+                if sol is not None:
+                    
+                    # update ray
+                    ray.pos = ray.getPoint(sol[2])
+                    ray.bounces += 1
+                    x = reflect(ray.ori,surface.getNormal(sol[0],sol[1]), None)
+                    # if reflected
+                    if x is not None:
+                        ray.ori = x / norm(x) # update ori to unit vector reflection
+                        
+                    # otherwise, no reflection means ray is dead
+                    else:
+                        ray.dead = True 
+                        break
+                    #: print(ray.ori)               #Prints the rays' origin
+                    #: print(ray.pos)               #Prints the rays' position
+                
+                else: break
+            if ray.bounces > 2:
+                ray.plot3D(axes2, 'g')
+            elif ray.bounces == 1:
+                ray.plot3D(axes2, 'r')
+            if ray.bounces == 0:
+                ray.dead = True
+            if ray.num % 5000 == 0:
+                print(ray.num, "rays passed")
 
     # catch rays at detector
     detector.catchRays(rays)
