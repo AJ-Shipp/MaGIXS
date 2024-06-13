@@ -41,7 +41,7 @@ if __name__ == '__main__':
                         flux.
             core_radius If shield is True then use this value for the shield radius
     """
-    detector = Detector(center=[0,0,230], height=1.5, width=3, reso=[1024,2048])
+    detector = Detector(center=[0,0,233.5], height=1.5, width=3, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -145,8 +145,8 @@ if __name__ == '__main__':
             If the ray's x coordinate is below 0.5*module's wide end radius, or if the y coordinate 
             is below 0*module's wide end radius, then the ray is removed  
             """
-            if (ray.pos[0] < modR_w*0.5 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*0 or ray.pos[1] > modR_w*(3**(1/2))/2): 
-                ray.dead = True
+            #: if (ray.pos[0] < modR_w*0.5 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*0 or ray.pos[1] > modR_w*(3**(1/2))/2): 
+            #:     ray.dead = True
 
             # reset surfaces
             surfaces = [s for s in allSurfaces]
