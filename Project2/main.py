@@ -66,7 +66,8 @@ if __name__ == '__main__':
     z_coord = r*np.cos(phi)
     z_ang = r*np.cos(theta)/r
 
-    source = Source(center=(x_coord,x_coord,-z_coord), normal=(-x_coord,-x_coord,z_coord))
+    source = Source(center=(x_coord,x_coord,-z_coord),width=5.344122475091453*2, 
+                    height=5.344122475091453*2, normal=(-x_coord,-x_coord,z_coord))
     """
     Parameters:
             center:    the center location of the source
