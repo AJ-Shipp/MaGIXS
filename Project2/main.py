@@ -67,7 +67,7 @@ if __name__ == '__main__':
     ##Spherical (r, theta, phi) to Cartesian
     ## r = c
     r = 10 #[cm]
-    theta = 24/60/60                    #Deg/60/60 = x'
+    theta = 0/60/60                    #Deg/60/60 = x'
     phi = 0/60/60                      #Deg/60/60 = x'
     x_coord = r*np.sin(theta)*np.cos(phi)
     y_coord = r*np.sin(theta)*np.sin(phi)
@@ -108,7 +108,7 @@ if __name__ == '__main__':
     detector.plot3D(axes2, 'b')
 
     # generate 5000 rays at source
-    rays = source.generateRays(module.targetFront, 5000)
+    rays = source.generateRays(module.targetFront, 50000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
@@ -148,8 +148,8 @@ if __name__ == '__main__':
             If the ray's x coordinate is below 0.5*module's wide end radius, or if the y coordinate 
             is below 0*module's wide end radius, then the ray is removed  
             """
-            #: if (ray.pos[0] < modR_w*0.5 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*0 or ray.pos[1] > modR_w*(3**(1/2))/2): 
-            #:     ray.dead = True
+            if (ray.pos[0] < modR_w*(3**(1/2))/2 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*(-1/2) or ray.pos[1] > modR_w*(1/2)): 
+                ray.dead = True
 
             # reset surfaces
             surfaces = [s for s in allSurfaces]
@@ -256,7 +256,7 @@ if __name__ == '__main__':
     # create scatter plot
     detectorRays = detector.rays
     fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
-    scatterHist(detectorRays, fig, binwidth=0.001) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
+    scatterHist(detectorRays, fig, binwidth=0.05) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
 
     # show
     plt.show()
