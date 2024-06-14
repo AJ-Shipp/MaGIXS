@@ -41,7 +41,15 @@ if __name__ == '__main__':
                         flux.
             core_radius If shield is True then use this value for the shield radius
     """
-    detector = Detector(center=[0,0,233.5], height=1.5, width=3, reso=[1024,2048])
+    
+    #Setting variables for the module dimensions, prints wide section's radius
+    modDims = module.getDims()
+    modR_w = modDims[0]
+    modR_s = modDims[1]
+    modL = modDims[2]
+    print(modDims[0])
+
+    detector = Detector(center=[0,0,233.5], height=25, width=25, reso=[1024//4,2048//8])
     """
     Parameters:
             center:    the center location of the detector
@@ -58,16 +66,16 @@ if __name__ == '__main__':
 
     ##Spherical (r, theta, phi) to Cartesian
     ## r = c
-    r = 200 #[cm]
-    theta = 0/60/60                    #Deg/60/60 = x'
+    r = 10 #[cm]
+    theta = 24/60/60                    #Deg/60/60 = x'
     phi = 0/60/60                      #Deg/60/60 = x'
-    x_coord = r*np.sin(phi)*np.cos(theta)
-    y_coord = r*np.sin(phi)*np.sin(theta)
-    z_coord = r*np.cos(phi)
+    x_coord = r*np.sin(theta)*np.cos(phi)
+    y_coord = r*np.sin(theta)*np.sin(phi)
+    z_coord = r*np.cos(theta)
     z_ang = r*np.cos(theta)/r
 
-    source = Source(center=(x_coord,x_coord,-z_coord),width=5.344122475091453*2, 
-                    height=5.344122475091453*2, normal=(-x_coord,-x_coord,z_coord))
+    source = Source(center=(x_coord,y_coord,-z_coord),width=modR_w*2, 
+                    height=modR_w*2, normal=(-x_coord,-y_coord,z_coord))
     """
     Parameters:
             center:    the center location of the source
@@ -99,17 +107,11 @@ if __name__ == '__main__':
     source.plot3D(axes2, 'b')
     detector.plot3D(axes2, 'b')
 
-    # generate 50000 rays at source
-    rays = source.generateRays(module.targetFront, 50000)
+    # generate 5000 rays at source
+    rays = source.generateRays(module.targetFront, 5000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
-
-    modDims = module.getDims()
-    modR_w = modDims[0]
-    modR_s = modDims[1]
-    modL = modDims[2]
-    print(modDims[0])
 
     if passR == True:
         '''
