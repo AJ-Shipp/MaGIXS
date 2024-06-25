@@ -23,6 +23,7 @@ if __name__ == '__main__':
     sLength = 30.0              #[cm]
     radii = [5.15100]
     angle = 0.00643732691573
+    blockerSegment = False
 
     ## Initialization of the module, detector, source, and shell
     module = Module(base=[0, 0, 0], seglen=30.0, focal=200.0, radii=[5.151], angles=None,
@@ -49,7 +50,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
 
-    detector = Detector(center=[0,0,233.5], height=25, width=25, reso=[1024//4,2048//8])
+    detector = Detector(center=[0,0,230], height=2, width=2, reso=[256,256])
     """
     Parameters:
             center:    the center location of the detector
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     detector.plot3D(axes2, 'b')
 
     # generate 5000 rays at source
-    rays = source.generateRays(module.targetFront, 50000)
+    rays = source.generateRays(module.targetFront, 5000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
@@ -148,8 +149,9 @@ if __name__ == '__main__':
             If the ray's x coordinate is below 0.5*module's wide end radius, or if the y coordinate 
             is below 0*module's wide end radius, then the ray is removed  
             """
-            if (ray.pos[0] < modR_w*(3**(1/2))/2 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*(-1/2) or ray.pos[1] > modR_w*(1/2)): 
-                ray.dead = True
+            if blockerSegment == True:
+                if (ray.pos[0] < modR_w*(3**(1/2))/2 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*(-1/2) or ray.pos[1] > modR_w*(1/2)): 
+                    ray.dead = True
 
             # reset surfaces
             surfaces = [s for s in allSurfaces]
