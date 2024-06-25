@@ -258,7 +258,7 @@ if __name__ == '__main__':
     # create scatter plot
     detectorRays = detector.rays
     fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
-    scatterHist(detectorRays, fig, binwidth=0.05) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
+    scatterHist(detectorRays, fig, binwidth=0.01) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
 
     # show
     plt.show()
