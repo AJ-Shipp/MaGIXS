@@ -50,7 +50,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
 
-    detector = Detector(center=[0,0,230], height=2, width=2, reso=[256,256])
+    detector = Detector(center=[0,0,230], height=10, width=10, reso=[512,512])
     """
     Parameters:
             center:    the center location of the detector
@@ -108,8 +108,8 @@ if __name__ == '__main__':
     source.plot3D(axes2, 'b')
     detector.plot3D(axes2, 'b')
 
-    # generate 5000 rays at source
-    rays = source.generateRays(module.targetFront, 5000)
+    # generate 50000 rays at source
+    rays = source.generateRays(module.targetFront, 25000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
