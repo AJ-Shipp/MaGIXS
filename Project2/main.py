@@ -50,7 +50,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
 
-    detector = Detector(center=[0,0,230], height=10, width=10, reso=[512,512])
+    detector = Detector(center=[0,0,230], height=2, width=2, reso=[2048,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -109,7 +109,7 @@ if __name__ == '__main__':
     detector.plot3D(axes2, 'b')
 
     # generate 50000 rays at source
-    rays = source.generateRays(module.targetFront, 25000)
+    rays = source.generateRays(module.targetFront, 5000)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
@@ -252,13 +252,17 @@ if __name__ == '__main__':
     detector.catchRays(rays)
 
     ## plot detector pixels
-    plot(detector)
-    plt.gca().invert_yaxis()
+    #Test: plot(detector)
+    #Test: plt.gca().invert_yaxis()
 
     # create scatter plot
     detectorRays = detector.rays
-    fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
-    scatterHist(detectorRays, fig, binwidth=0.01) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
+    #Test: fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
+    #Test: scatterHist(detectorRays, fig, binwidth=0.01) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
+
+    for i in len(rays):
+        print(ray.pos[0], ray.pos[1], ray.pos[2])
+        
 
     # show
-    plt.show()
+    #Test: plt.show()
