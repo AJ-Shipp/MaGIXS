@@ -54,7 +54,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
 
-    detector = Detector(center=[0,0,231.0], height=2, width=2, reso=[2048,2048])
+    detector = Detector(center=[0,0,230.0], height=2, width=2, reso=[2048,2048])
     """
     Parameters:
             center:    the center location of the detector
