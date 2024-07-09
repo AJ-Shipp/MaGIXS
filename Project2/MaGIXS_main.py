@@ -14,6 +14,10 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
+def distance(x,y):
+        z = np.sqrt(np.square(x) + np.square(y))
+        return z
+
 if __name__ == '__main__':
 
     passR = True
@@ -259,6 +263,30 @@ if __name__ == '__main__':
     detectorRays = detector.rays
     fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
     scatterHist(detectorRays, fig, binwidth=0.01) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
+
+    k=0
+    counter = int()
+    distMin = 1000
+    distMax = 0
+
+    f = open("outputA", "w")
+
+    for i in rays:
+        if rays[k].des[2] != 0.:
+            counter += 1
+            dist = distance(rays[k].des[0], rays[k].des[1])
+            if dist < distMin:
+                    distMin = dist
+            if dist > distMax:
+                    distMax = dist
+            f.write(str(distMin))
+            f.write(", ")
+            f.write(str(distMax))
+            f.write("\n")
+            print(counter, distMin, distMax)
+        k += 1
+    rad = distMax - distMin
+    print("The radius of the spread is", rad, "cm")
 
     # show
     plt.show()
