@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     ## Initialization of the module, detector, source, and shell
     module = Module(base=bs1, seglen=sLength, focal=focalLength, radii=radii, angles=None,
-                 conic=True, shield=True, core_radius=0)
+                 conic=False, shield=True, core_radius=0)
     """
     Parameters:
             base:       the center point of the wide end of the segment
