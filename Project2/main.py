@@ -279,10 +279,10 @@ if __name__ == '__main__':
                     distMin = dist
             if dist > distMax:
                     distMax = dist
-            f.write(str(distMin))
-            f.write(", ")
-            f.write(str(distMax))
-            f.write("\n")
+            #Writing to outputA File: f.write(str(distMin))
+            #Writing to outputA File: f.write(", ")
+            #Writing to outputA File: f.write(str(distMax))
+            #Writing to outputA File: f.write("\n")
             print(counter, distMin, distMax)
         k += 1
     rad = distMax - distMin
