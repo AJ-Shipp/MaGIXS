@@ -266,7 +266,6 @@ if __name__ == '__main__':
 
     k=0
     counter = int()
-    distMin = 1000
     distMax = 0
 
     f = open("outputA", "w")
@@ -275,18 +274,15 @@ if __name__ == '__main__':
         if rays[k].des[2] != 0.:
             counter += 1
             dist = distance(rays[k].des[0], rays[k].des[1])
-            if dist < distMin:
-                    distMin = dist
             if dist > distMax:
                     distMax = dist
             #Writing to outputA File: f.write(str(distMin))
             #Writing to outputA File: f.write(", ")
             #Writing to outputA File: f.write(str(distMax))
             #Writing to outputA File: f.write("\n")
-            print(counter, distMin, distMax)
+            print(counter, distMax)
         k += 1
-    rad = distMax - distMin
-    print("The radius of the spread is", rad, "cm")
+    print("The radius of the spread is", distMax, "cm")
 
     # show
     #Test: plt.show()
