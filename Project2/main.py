@@ -256,13 +256,13 @@ if __name__ == '__main__':
     detector.catchRays(rays)
 
     ## plot detector pixels
-    #Test: plot(detector)
-    #Test: plt.gca().invert_yaxis()
+    plot(detector)
+    plt.gca().invert_yaxis()
 
     # create scatter plot
     detectorRays = detector.rays
-    #Test: fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
-    #Test: scatterHist(detectorRays, fig, binwidth=0.01) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
+    fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
+    scatterHist(detectorRays, fig, binwidth=0.00000000001) #binwidth = 1E-11 #-# 0.05 w/ default detector is wanted shape
 
     k=0
     counter = int()
@@ -285,4 +285,4 @@ if __name__ == '__main__':
     print("The radius of the spread is", distMax, "cm")
 
     # show
-    #Test: plt.show()
+    plt.show()
