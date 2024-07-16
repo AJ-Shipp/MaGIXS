@@ -20,17 +20,39 @@ def distance(x,y):
 
 if __name__ == '__main__':
 
+    """
+    Different Settings/Add-Ons
+
+    passR = Passes the created rays through the module
+    spotW = Function to find the width of the focus spot
+    plot3D = Plots a 3D image of the source, module, rays, and detector
+    plotDetector = Plots the detector
+    plotScatHist = Plots the scatter histogram
+    numRays = How many rays you want to create
+    arcminOff = How far off axis you'd like the source to be
+    arcminDiag = If you want the x & y axes to be equally off axis
+    """
     passR = True
+    spotW = False
+    plot3D = False
+    plotDetector = False
+    plotScatHist = True
+    numRays = 50000
+    arcminOff = 0
+    arcminDiag = True
+    scatHistSize = 10
+    binW = 0.01
+    blockerSegment = True
+
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
-    focalLength = 109.02         #[cm]
-    sLength = 12.50              #[cm]
-    radii = [7.3061]
+    focalLength = 109.01        #[cm]
+    sLength = 12.50             #[cm]
+    radii = [5.151]
     angle = 0.00643732691573
-    blockerSegment = False
 
     ## Initialization of the module, detector, source, and shell
-    module = Module(base=bs1, seglen=sLength, focal=focalLength, radii=radii, angles=None,
+    module = Module(base=[0, 0, 0], seglen=sLength, focal=focalLength, radii=radii, angles=None,
                  conic=False, shield=True, core_radius=0)
     """
     Parameters:
@@ -54,7 +76,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
 
-    detector = Detector(center=[0,0,121.52], height=10, width=10, reso=[2048,2048])
+    detector = Detector(center=[0,0,121.51], height=1.5, width=3, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -72,10 +94,11 @@ if __name__ == '__main__':
     ##Spherical (r, theta, phi) to Cartesian
     ## r = c
     r = 10 #[cm]
-    theta = 0/60/60                    #Deg/60/60 = x'
-    phi = 0/60/60                      #Deg/60/60 = x'
+    theta = arcminOff/60/60                   #Deg/60/60 = x'
+    phi = 0                                   #Deg/60/60 = x'
     x_coord = r*np.sin(theta)*np.cos(phi)
-    y_coord = r*np.sin(theta)*np.sin(phi)
+    if arcminDiag == True:
+        y_coord = x_coord
     z_coord = r*np.cos(theta)
     z_ang = r*np.cos(theta)/r
 
@@ -93,7 +116,7 @@ if __name__ == '__main__':
             spectrum:  optional numpy array (2xN) of energy spectrum
             tag : 'Source' Tag all rays with 'Source', place where the came from.
     """
-    shell = Shell(base=bs1, seglen=sLength, conic=True)
+    shell = Shell(base=bs1, seglen=sLength, conic=False)
     """
     Parameters:
             base:    the center point of the wide end of the segment
@@ -104,16 +127,17 @@ if __name__ == '__main__':
             r:       radius of the shell where the two segments meet    
     """
     
-    # creating a 3D image of the shell to verify its creation
-    fig2 = plt.figure(figsize=(5, 5))
-    axes2 = get3dAxes(fig2)
-    plt.axes(axes2)
-    module.plot3D(axes2, 'b')
-    source.plot3D(axes2, 'b')
-    detector.plot3D(axes2, 'b')
+    if plot3D == True:
+        # creating a 3D image of the shell to verify its creation
+        fig3D = plt.figure(figsize=(5, 5))
+        axes3D = get3dAxes(fig3D)
+        plt.axes(axes3D)
+        module.plot3D(axes3D, 'b')
+        source.plot3D(axes3D, 'b')
+        detector.plot3D(axes3D, 'b')
 
     # generate 50000 rays at source
-    rays = source.generateRays(module.targetFront, 25000)
+    rays = source.generateRays(module.targetFront, numRays)
 
     # pass rays through shell
     surfaces = shell.getSurfaces() # each shell has two segments
@@ -201,15 +225,16 @@ if __name__ == '__main__':
                         # print("%i ray killed by reflect" % ray.num)
                         break
 
-                    """
-                    If the ray is not dead, then the rays with 2 bounces are plotted with green
-                        and the rays with only 1 bounce (ghost rays) are plotted in red
-                    """
-                    if ray.dead == False:
-                        if ray.bounces == 2:
-                            ray.plot3D(axes2, 'g')
-                        elif ray.bounces == 1:
-                            ray.plot3D(axes2, 'r')
+                    if plot3D == True:
+                        """
+                        If the ray is not dead, then the rays with 2 bounces are plotted with green
+                            and the rays with only 1 bounce (ghost rays) are plotted in red
+                        """
+                        if ray.dead == False:
+                            if ray.bounces == 2:
+                                ray.plot3D(axes3D, 'g')
+                            elif ray.bounces == 1:
+                                ray.plot3D(axes3D, 'r')
 
                     # knowing the surface it has just hit, we can
                     # narrow down the number of surface to test
@@ -255,38 +280,35 @@ if __name__ == '__main__':
     # catch rays at detector
     detector.catchRays(rays)
 
-    ## plot detector pixels
-    plot(detector)
-    plt.gca().invert_yaxis()
+    if plotDetector == True:
+        ## plot detector pixels
+        plot(detector)
 
-    # create scatter plot
-    detectorRays = detector.rays
-    fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
-    scatterHist(detectorRays, fig, binwidth=0.01) #binwidth = 1E? #-# 0.05 w/ default detector is wanted shape
+    if plotScatHist == True:
+        # create scatter plot
+        detectorRays = detector.rays
+        fig = plt.figure(figsize=(scatHistSize,scatHistSize), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
+        scatterHist(detectorRays, fig, binwidth=binW) #binwidth = 1E-7 #-# 0.05 w/ default detector is wanted shape
 
-    k=0
-    counter = int()
-    distMin = 1000
-    distMax = 0
-
-    f = open("outputA", "w")
-
-    for i in rays:
-        if rays[k].des[2] != 0.:
-            counter += 1
-            dist = distance(rays[k].des[0], rays[k].des[1])
-            if dist < distMin:
-                    distMin = dist
-            if dist > distMax:
-                    distMax = dist
-            f.write(str(distMin))
-            f.write(", ")
-            f.write(str(distMax))
-            f.write("\n")
-            print(counter, distMin, distMax)
-        k += 1
-    rad = distMax - distMin
-    print("The radius of the spread is", rad, "cm")
+    if spotW == True:
+    
+        k=0
+        counter = int()
+        distMax = 0
+        #Writing to outputA File: f = open("outputA", "w")
+        for i in rays:
+            if rays[k].des[2] != 0.:
+                counter += 1
+                dist = distance(rays[k].des[0], rays[k].des[1])
+                if dist > distMax:
+                        distMax = dist
+                #Writing to outputA File: f.write(str(distMin))
+                #Writing to outputA File: f.write(", ")
+                #Writing to outputA File: f.write(str(distMax))
+                #Writing to outputA File: f.write("\n")
+                print(counter, distMax)
+            k += 1
+        print("The radius of the spread is", distMax, "cm")
 
     # show
     plt.show()
