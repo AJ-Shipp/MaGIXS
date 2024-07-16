@@ -35,22 +35,24 @@ if __name__ == '__main__':
     passR = True
     spotW = False
     plot3D = False
-    plotDetector = True
-    plotScatHist = False
+    plotDetector = False
+    plotScatHist = True
     numRays = 50000
-    arcminOff = 16
+    arcminOff = 0
     arcminDiag = True
+    scatHistSize = 10
+    binW = 0.01
+    blockerSegment = False
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
     focalLength = 200.0         #[cm]
     sLength = 30.0              #[cm]
-    radii = [5.151, 4.9, 4.659, 4.429, 4.21, 4.0, 3.799]
+    radii = [5.151]
     angle = 0.00643732691573
-    blockerSegment = False
 
     ## Initialization of the module, detector, source, and shell
-    module = Module(base=[0, 0, 0], seglen=30.0, focal=200.0, radii=[5.151, 4.9, 4.659, 4.429, 4.21, 4.0, 3.799], angles=None,
+    module = Module(base=[0, 0, 0], seglen=30.0, focal=200.0, radii=[5.151], angles=None,
                  conic=False, shield=True, core_radius=0)
     """
     Parameters:
@@ -74,7 +76,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
 
-    detector = Detector(center=[-1,-1,230.0], height=3, width=3, reso=[256,256])
+    detector = Detector(center=[0,0,230.0], height=2, width=2, reso=[256,256])
     """
     Parameters:
             center:    the center location of the detector
@@ -285,8 +287,8 @@ if __name__ == '__main__':
     if plotScatHist == True:
         # create scatter plot
         detectorRays = detector.rays
-        fig = plt.figure(figsize=(10,10), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
-        scatterHist(detectorRays, fig, binwidth=0.01) #binwidth = 1E-7 #-# 0.05 w/ default detector is wanted shape
+        fig = plt.figure(figsize=(scatHistSize,scatHistSize), dpi=50) #Default values of 'figsize=(5,5), dpi=100'
+        scatterHist(detectorRays, fig, binwidth=binW) #binwidth = 1E-7 #-# 0.05 w/ default detector is wanted shape
 
     if spotW == True:
     
