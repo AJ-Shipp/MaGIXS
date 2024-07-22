@@ -35,7 +35,7 @@ if __name__ == '__main__':
     passR = True
     spotW = False
     plot3D = False
-    plotDetector = False
+    plotDetector = True
     plotScatHist = True
     numRays = 50000
     arcminOff = 0
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
 
-    detector = Detector(center=[0,0,121.51], height=1.5, width=3, reso=[1024,2048])
+    detector = Detector(center=[0,0,121.51], height=1.33, width=2.66, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
