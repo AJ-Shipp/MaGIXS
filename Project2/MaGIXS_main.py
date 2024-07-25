@@ -35,14 +35,15 @@ if __name__ == '__main__':
     passR = True
     spotW = False
     plot3D = False
-    plotDetector = True
-    plotScatHist = True
+    plotDetector = False
+    plotScatHist = False
     numRays = 50000
     arcminOff = 0
     arcminDiag = True
     scatHistSize = 10
     binW = 0.01
     blockerSegment = True
+    allRaysFile = True
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
@@ -309,6 +310,29 @@ if __name__ == '__main__':
                 print(counter, distMax)
             k += 1
         print("The radius of the spread is", distMax, "cm")
+
+    if allRaysFile == True:
+
+        num = 0
+        count = int()
+
+        f = open("allRays", "a")
+        for ray in rays:
+            if rays[num].des[2] != 0:
+                count += 1
+                f.write(str(detector.center[2]))
+                f.write(", ")
+                f.write(str(num))
+                f.write(", ")
+                f.write(str(rays[num].des[0]))
+                f.write(", ")
+                f.write(str(rays[num].des[1]))
+                f.write(", ")
+                f.write(str(rays[num].des[2]))
+                f.write("\n")
+            num += 1
+        f.close()
+
 
     # show
     plt.show()
