@@ -34,22 +34,22 @@ if __name__ == '__main__':
     """
     passR = True
     spotW = False
-    plot3D = False
-    plotDetector = False
-    plotScatHist = False
-    numRays = 50000
+    plot3D = True
+    plotDetector = True
+    plotScatHist = True
+    numRays = 25000
     arcminOff = 0
-    arcminDiag = True
+    arcminDiag = False
     scatHistSize = 10
     binW = 0.01
     blockerSegment = True
-    allRaysFile = True
+    allRays2File = True
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
     focalLength = 109.01        #[cm]
     sLength = 12.50             #[cm]
-    radii = [5.151]
+    radii = [7.3061]
     angle = 0.00643732691573
 
     ## Initialization of the module, detector, source, and shell
@@ -76,8 +76,8 @@ if __name__ == '__main__':
     modR_s = modDims[1]
     modL = modDims[2]
     print(modDims[0])
-
-    detector = Detector(center=[0,0,121.51], height=1.33, width=2.66, reso=[1024,2048])
+    
+    detector = Detector(center=[0,0,122.01], normal=[0,0,1], height=1.33, width=2.66, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -100,6 +100,8 @@ if __name__ == '__main__':
     x_coord = r*np.sin(theta)*np.cos(phi)
     if arcminDiag == True:
         y_coord = x_coord
+    else:
+        y_coord = 0
     z_coord = r*np.cos(theta)
     z_ang = r*np.cos(theta)/r
 
@@ -311,12 +313,12 @@ if __name__ == '__main__':
             k += 1
         print("The radius of the spread is", distMax, "cm")
 
-    if allRaysFile == True:
+    if allRays2File == True:
 
         num = 0
         count = int()
 
-        f = open("allRays", "a")
+        f = open("allRays2", "a")
         for ray in rays:
             if rays[num].des[2] != 0:
                 count += 1
