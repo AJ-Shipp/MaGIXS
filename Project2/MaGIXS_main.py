@@ -34,16 +34,16 @@ if __name__ == '__main__':
     """
     passR = True
     spotW = False
-    plot3D = True
+    plot3D = False
     plotDetector = True
-    plotScatHist = True
-    numRays = 25000
-    arcminOff = 0
+    plotScatHist = False
+    numRays = 50000
+    arcminOff = 2
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
-    blockerSegment = True
-    allRays2File = True
+    blockerSegment = False
+    allRays2File = False
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
     
-    detector = Detector(center=[0,0,122.01], normal=[0,0,1], height=1.33, width=2.66, reso=[1024,2048])
+    detector = Detector(center=[0,0,121.51], normal=[0,0,1], height=1.33, width=2.66, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
