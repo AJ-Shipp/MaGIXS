@@ -11,6 +11,7 @@ from foxsisim.mymath import reflect
 from numpy.linalg import norm
 from foxsisim.plotting import scatterHist, get3dAxes, plot
 import numpy as np
+from astropy.io import fits
 
 import matplotlib.pyplot as plt
 
@@ -37,13 +38,14 @@ if __name__ == '__main__':
     plot3D = False
     plotDetector = True
     plotScatHist = False
-    numRays = 50000
-    arcminOff = 2
+    numRays = 5000
+    arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
     blockerSegment = False
     allRays2File = False
+    fitsBool = True
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
@@ -77,7 +79,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
     
-    detector = Detector(center=[0,0,121.51], normal=[0,0,1], height=1.33, width=2.66, reso=[1024,2048])
+    detector = Detector(center=[0,0,121.51], normal=[0,0,1], height=1.3824, width=2.7648, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -335,6 +337,73 @@ if __name__ == '__main__':
             num += 1
         f.close()
 
+    if fitsBool == True:
+        #.fits Files
+        up1 = 0
+        dataTemps = []
+        dataPairs = []
+        dataFinal = []
+
+        for ray in rays:
+            if rays[up1].des[2] != 0:
+                rays[up1].des[0] = np.floor(((rays[up1].des[0] + 0.6912) * 1024))
+                rays[up1].des[1] = np.floor(((rays[up1].des[1] + 1.3824) * 2048))
+                duo = rays[up1].des[0], rays[up1].des[1]
+                dataTemps.append(duo)
+
+                #   Should append all rays' final destinations into a list with the third value in the tuple being equal to the 
+                # number of times that specific final position occurs in the original list of destinations
+                """
+                # initializing the titles and rows list
+                fields = []
+                rows = []
+                data_list = []
+                pairs = []
+                counters = []
+                checked = []
+
+                # reading csv file
+                with open(filename, 'r') as csvfile:
+                    # creating a csv reader object
+                    csvreader = csv.reader(csvfile)
+
+                    # extracting field names through first row
+                    fields = next(csvreader)
+
+                    # Iterate through each row in the CSV file
+                    for row in csvreader:
+                        currentX = row[5]
+                        currentY = row[6]
+                        pair = (currentX, currentY)
+                        pairs.append(pair)
+
+                    # get total number of rows
+                    print("Total no. of rows: %d" % (csvreader.line_num))
+
+                    for data in pairs:
+                        need = data
+                        print(need)
+                        num = pairs.count(need) 
+                        insert = need, num
+                        if checked.count(insert) == 0:
+                            checked.append(insert)
+                """
+                print(rays[up1].des[0], rays[up1].des[1])
+            up1 += 1
+
+        for data in dataTemps:
+            need = data
+            num = dataTemps.count(need)
+            insert = need, num
+            if dataPairs.count(insert) == 0:
+                dataPairs.append(insert)
+
+        for data in dataPairs:
+            temp = data
+            stuff = temp[0][0], temp[0][1], temp[1]
+            dataFinal.append(stuff)
+
+        print(dataFinal)
 
     # show
     plt.show()
