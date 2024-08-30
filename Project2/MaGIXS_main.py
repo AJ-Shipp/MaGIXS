@@ -38,14 +38,15 @@ if __name__ == '__main__':
     plot3D = False
     plotDetector = True
     plotScatHist = False
-    numRays = 5000
+    numRays = 50000
     arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
-    blockerSegment = False
-    allRays2File = False
+    blockerSegment = True
+    allRays2File = True
     fitsBool = True
+    dataOutputFile = "arc_m5.csv"
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
     
-    detector = Detector(center=[0,0,121.51], normal=[0,0,1], height=1.3824, width=2.7648, reso=[1024,2048])
+    detector = Detector(center=[0,0,121.51+0.5], normal=[0,0,1], height=1.3824, width=2.7648, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -288,6 +289,8 @@ if __name__ == '__main__':
     if plotDetector == True:
         ## plot detector pixels
         plot(detector)
+        plt.gca().invert_yaxis()
+
 
     if plotScatHist == True:
         # create scatter plot
@@ -315,28 +318,6 @@ if __name__ == '__main__':
             k += 1
         print("The radius of the spread is", distMax, "cm")
 
-    if allRays2File == True:
-
-        num = 0
-        count = int()
-
-        f = open("allRays2", "a")
-        for ray in rays:
-            if rays[num].des[2] != 0:
-                count += 1
-                f.write(str(detector.center[2]))
-                f.write(", ")
-                f.write(str(num))
-                f.write(", ")
-                f.write(str(rays[num].des[0]))
-                f.write(", ")
-                f.write(str(rays[num].des[1]))
-                f.write(", ")
-                f.write(str(rays[num].des[2]))
-                f.write("\n")
-            num += 1
-        f.close()
-
     if fitsBool == True:
         #.fits Files
         up1 = 0
@@ -346,8 +327,8 @@ if __name__ == '__main__':
 
         for ray in rays:
             if rays[up1].des[2] != 0:
-                rays[up1].des[0] = np.floor(((rays[up1].des[0] + 0.6912) * 1024))
-                rays[up1].des[1] = np.floor(((rays[up1].des[1] + 1.3824) * 2048))
+                rays[up1].des[0] = np.floor(((rays[up1].des[0] + 0.6912) / 0.00135))
+                rays[up1].des[1] = np.floor(((rays[up1].des[1] + 1.3824) / 0.00135))
                 duo = rays[up1].des[0], rays[up1].des[1]
                 dataTemps.append(duo)
 
@@ -404,6 +385,25 @@ if __name__ == '__main__':
             dataFinal.append(stuff)
 
         print(dataFinal)
+
+    if allRays2File == True:
+
+        num = 0
+        f = open(dataOutputFile, "a")
+
+        for data in dataFinal:
+            rowData = data
+            print(rowData)
+            f.write(str(int(rowData[0])))
+            f.write(", ")
+            f.write(str(int(rowData[1])))
+            f.write(", ")
+            f.write(str(int(rowData[2])))
+            f.write("\n")
+            num += 1
+        
+        f.close()
+
 
     # show
     plt.show()
