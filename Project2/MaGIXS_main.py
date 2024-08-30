@@ -38,7 +38,7 @@ if __name__ == '__main__':
     plot3D = False
     plotDetector = True
     plotScatHist = False
-    numRays = 50000
+    numRays = 500000
     arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
     
-    detector = Detector(center=[0,0,121.51+0.5], normal=[0,0,1], height=1.3824, width=2.7648, reso=[1024,2048])
+    detector = Detector(center=[0,0,121.51-0.5], normal=[0,0,1], height=1.3824*2, width=2.7648, reso=[1024*2,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -327,7 +327,7 @@ if __name__ == '__main__':
 
         for ray in rays:
             if rays[up1].des[2] != 0:
-                rays[up1].des[0] = np.floor(((rays[up1].des[0] + 0.6912) / 0.00135))
+                rays[up1].des[0] = np.floor(((rays[up1].des[0] + 0.6912*2) / 0.00135))
                 rays[up1].des[1] = np.floor(((rays[up1].des[1] + 1.3824) / 0.00135))
                 duo = rays[up1].des[0], rays[up1].des[1]
                 dataTemps.append(duo)
