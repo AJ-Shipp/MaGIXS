@@ -4,9 +4,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import csv
 
-dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/throughFocusProgram/dataOutPut.csv"
+#"C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/arc_m5.csv"
+dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/arc_m5.csv"
 fits_image = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/fitsExamples/proc_focus-1_mask_5sec.fits"
-myData = "myData.fits"
+myData = "myData+5.fits"
 inputImg = myData
 
 img = np.zeros((1024,2048))
@@ -31,7 +32,11 @@ with fits.open(fits_image) as hdul:
 image_data = fits.getdata(inputImg)
 print("\n")
 plt.imshow(image_data, cmap='gray')
+#: plt.gca().invert_yaxis()
 plt.colorbar()
+#: plt.xlim()
+#: plt.ylim()
+plt.contour(image_data)
 plt.show()
 
 print(img)
