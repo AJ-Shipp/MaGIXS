@@ -38,12 +38,13 @@ if __name__ == '__main__':
     plot3D = False
     plotDetector = True
     plotScatHist = False
-    numRays = 500000
+    numRays = 5000000
     arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
     blockerSegment = True
+    bSegAng = 15
     allRays2File = True
     fitsBool = True
     dataOutputFile = "arc_m5.csv"
@@ -184,7 +185,10 @@ if __name__ == '__main__':
             is below 0*module's wide end radius, then the ray is removed  
             """
             if blockerSegment == True:
-                if (ray.pos[0] < modR_w*(3**(1/2))/2 or ray.pos[0] > modR_w) or (ray.pos[1] < modR_w*(-1/2) or ray.pos[1] > modR_w*(1/2)): 
+                if (
+                    (ray.pos[0] < modR_w*np.cos(np.radians(bSegAng)) or (ray.pos[0] > modR_w)) or 
+                    (ray.pos[1] < modR_w*-np.sin(np.radians(bSegAng)) or ray.pos[1] > modR_w*(np.sin(np.radians(bSegAng))))
+                   ): 
                     ray.dead = True
 
             # reset surfaces
