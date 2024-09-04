@@ -9,7 +9,7 @@ import matplotlib.cm as cm
 dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/arc_m5.csv"
 fits_image = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/fitsExamples/proc_focus-5_mask_5sec.fits"
 myData = "myData_M5_rot+shift.fits"
-inputImg = fits_image
+inputImg = myData
 datRot = False
 contour = True
 
@@ -39,7 +39,7 @@ with open(dataFile, 'r') as csvfile:
         
             r[0] = int(np.floor(newPair[0][0]))
             r[1] = int(np.floor(newPair[1][0]))
-        img[int(r[0])-xDiff][int(r[1])+yDiff] = float(r[2])/459*2600
+        img[int(r[0])-xDiff][int(r[1])+yDiff] = float(r[2])
 
 print(dataList[0:])
 print("\n")
