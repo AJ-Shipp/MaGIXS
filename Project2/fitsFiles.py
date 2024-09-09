@@ -4,12 +4,13 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import csv
 import matplotlib.cm as cm
+from matplotlib import colors
 
 #"C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/arc_m5.csv"
 dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/arc_m5.csv"
 fits_image = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/fitsExamples/proc_focus-5_mask_5sec.fits"
 myData = "myData_M5_rot+shift.fits"
-inputImg = myData
+inputImg = fits_image
 datRot = False
 contour = True
 
@@ -51,14 +52,14 @@ fits.writeto(myData, data=img, overwrite = True)
 
 image_data = fits.getdata(inputImg)
 print("\n")
-plt.imshow(image_data, cmap='jet', origin='lower')
+plt.imshow(image_data, cmap='jet', origin='lower', norm='linear', vmin=0)
 plt.colorbar()
-#: plt.xlim()
-#: plt.ylim()
+plt.xlim(1000,1060)
+plt.ylim(960,1020)
 
 if contour == True:
     plt.contour(image_data, [1000])
     
 plt.show()
 
-print(img)
+print(image_data)
