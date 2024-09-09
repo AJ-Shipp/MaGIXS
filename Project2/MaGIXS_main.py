@@ -44,6 +44,7 @@ if __name__ == '__main__':
     scatHistSize = 10
     binW = 0.01
     blockerSegment = True
+    bSegPos = 0
     bSegAng = 15
     allRays2File = True
     fitsBool = True
@@ -185,6 +186,7 @@ if __name__ == '__main__':
             is below 0*module's wide end radius, then the ray is removed  
             """
             if blockerSegment == True:
+                bSeg = bSegPos + bSegAng 
                 if (
                     (ray.pos[0] < modR_w*np.cos(np.radians(bSegAng)) or (ray.pos[0] > modR_w)) or 
                     (ray.pos[1] < modR_w*-np.sin(np.radians(bSegAng)) or ray.pos[1] > modR_w*(np.sin(np.radians(bSegAng))))
