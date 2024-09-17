@@ -36,19 +36,20 @@ if __name__ == '__main__':
     passR = True
     spotW = False
     plot3D = False
-    plotDetector = True
+    plotDetector = False
     plotScatHist = False
-    numRays = 5000000
+    numRays = 500000
     arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
     blockerSegment = True
     bSegPos = 0
-    bSegAng = 15
+    bSegAng = 17
     allRays2File = True
     fitsBool = True
-    dataOutputFile = "arc_m5.csv"
+    dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_md09.csv"
+    detPosZ = -0.09
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
@@ -82,7 +83,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[0])
     
-    detector = Detector(center=[0,0,121.51-0.5], normal=[0,0,1], height=1.3824*2, width=2.7648, reso=[1024*2,2048])
+    detector = Detector(center=[0,0,121.51+detPosZ], normal=[0,0,1], height=1.3824*2, width=2.7648, reso=[1024*2,2048])
     """
     Parameters:
             center:    the center location of the detector
