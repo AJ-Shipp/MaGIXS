@@ -49,7 +49,7 @@ if __name__ == '__main__':
     allRays2File = True
     fitsBool = True
     dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_md09.csv"
-    detPosZ = -0.09
+    detPosZ = -0.09              #[cm]
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
