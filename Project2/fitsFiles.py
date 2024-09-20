@@ -7,13 +7,13 @@ import matplotlib.cm as cm
 from matplotlib import colors
 
 #"C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/arc_m5.csv"
-dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_m4.csv"
-myData = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simFits/myData_M4_rot+shift.fits"                #0
-fits_image = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/fitsExamples/proc_focus-4_mask_5sec.fits"    #1
+dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_m5.csv"
+myData = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simFits/myData_M5_rot+shift.fits"                #0
+fits_image = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/fitsExamples/proc_focus-5_mask_5sec.fits"    #1
 datRot = True
 contour = True
 dataSelect = 1
-simCountMax = 55
+simCountMax = 57
 
 if dataSelect == 0:
     inputImg = myData
@@ -24,6 +24,13 @@ elif dataSelect == 1:
 img = np.zeros((2048,2048))
 th = np.radians(25)
 rotMtrx = np.array([[np.cos(th),np.sin(th)],[-np.sin(th),np.cos(th)]])
+
+def fmt(x):
+    x = x/simCountMax*100
+    s = f"{x:.1f}"
+    if s.endswith("0"):
+        s = f"{x:.0f}"
+    return rf"{s} \%" if plt.rcParams["text.usetex"] else f"{s} %"
 
 with open(dataFile, 'r') as csvfile:
     csvReader = csv.reader(csvfile)
@@ -61,20 +68,25 @@ image_data2 = fits.getdata(myData)
 
 print("\n")
 
-plot = plt.imshow(image_data, cmap='jet', origin='lower', norm='linear', vmin=0)
-plt.xlim(1000,1060)
-plt.ylim(960,1020)
+plot = plt.imshow(image_data, cmap='gray', origin='lower', norm='linear', vmin=0)
+plt.xlim(1000+20,1060-10)
+plt.ylim(960+10,1020-20)
 
 if contour == True:
-    plot.axes.set_title('SLTF(m4) and csSim(m4)',fontsize=20)
-    cs = plt.contour(image_data2, levels=[simCountMax*1/5, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5])
-    cs.set_linewidth(1)
+    # plot.axes.set_title('SLTF(m5) and csSim(m5)',fontsize=20)
+    # cv = plt.contour(image_data, levels=[2600.61669921875*0.8], colors='#505050')
+    cs = plt.contour(image_data2, levels=[-100, simCountMax*1/10, simCountMax*2/10, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5, 100], 
+                     colors=('#ffffff', '#ffe000','#ffbd00', '#ffb600', '#ff7f0e', '#d62728', '#ffffff'))
+    cs.set_linewidth(1.4)
     cbc = plt.colorbar(cs, shrink=1)
     cb = plt.colorbar(plot)
-    
+    cbc.add_lines(levels=[-100, simCountMax*1/10, simCountMax*2/10, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5, 100], 
+                  colors=('#ffffff', '#ffe000','#ffbd00', '#ffb600', '#ff7f0e', '#d62728', '#ffffff'), linewidths=6)
+
     print(cbc.get_ticks())
-    cbc.set_ticks(ticks=cbc.get_ticks(),labels=['20%','40%','60%','80%'])
-    cbc.set_label('Percent of Max Intensity')
+    cbc.set_ticks(ticks=cbc.get_ticks(),labels=['','10%','20%','40%','60%','80%',''], fontsize=12)
+    cbc.set_label('Simulation Percent of Max Intensity', fontsize=15)
+    
 else:
     plot.axes.set_title('SLTF(m4)',fontsize=20)
     plot.axes.set_title('csSim(m4)',fontsize=20)
