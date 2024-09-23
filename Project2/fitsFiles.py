@@ -73,7 +73,7 @@ plt.xlim(1000+20,1060-10)
 plt.ylim(960+10,1020-20)
 
 if contour == True:
-    # plot.axes.set_title('SLTF(m5) and csSim(m5)',fontsize=20)
+    plot.axes.set_title('SLTF(m5) and csSim(m5)',fontsize=20)
     # cv = plt.contour(image_data, levels=[2600.61669921875*0.8], colors='#505050')
     cs = plt.contour(image_data2, levels=[-100, simCountMax*1/10, simCountMax*2/10, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5, 100], 
                      colors=('#ffffff', '#ffe000','#ffbd00', '#ffb600', '#ff7f0e', '#d62728', '#ffffff'))
