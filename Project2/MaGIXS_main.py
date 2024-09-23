@@ -38,7 +38,7 @@ if __name__ == '__main__':
     plot3D = False
     plotDetector = False
     plotScatHist = False
-    numRays = 5000000
+    numRays = 500000
     arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
@@ -48,8 +48,8 @@ if __name__ == '__main__':
     bSegAng = 17
     allRays2File = True
     fitsBool = True
-    dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_md05.csv"
-    detPosZ = -0.05              #[cm]
+    dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_p6.csv"
+    detPosZ = 0.6              #[cm]
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[cm]
