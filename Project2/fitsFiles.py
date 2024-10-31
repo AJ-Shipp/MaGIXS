@@ -7,13 +7,13 @@ import matplotlib.cm as cm
 from matplotlib import colors
 
 #"C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/arc_m5.csv"
-dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_m5.csv"
-myData = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simFits/myData_M5_rot+shift.fits"                #0
-fits_image = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/fitsExamples/proc_focus-5_mask_5sec.fits"    #1
-datRot = True
+dataFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/offAxis_xShiftOnly.csv"
+myData = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simFits/myData_offAxis_Testing.fits"                #0
+fits_image = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/fitsExamples/proc_focus+6_mask_5sec.fits"    #1
+datRot = False
 contour = True
 dataSelect = 1
-simCountMax = 57
+simCountMax = 50
 
 if dataSelect == 0:
     inputImg = myData
@@ -21,7 +21,7 @@ if dataSelect == 0:
 elif dataSelect == 1:
     inputImg = fits_image
 
-img = np.zeros((2048,2048))
+img = np.zeros((2048*2,2048*2))
 th = np.radians(25)
 rotMtrx = np.array([[np.cos(th),np.sin(th)],[-np.sin(th),np.cos(th)]])
 
@@ -63,29 +63,29 @@ with fits.open(fits_image) as hdul:
     hdul.info()
     
 fits.writeto(myData, data=img, overwrite = True)
-image_data = fits.getdata(inputImg)
-image_data2 = fits.getdata(myData)
+# image_data = fits.getdata(inputImg)
+image_data = fits.getdata(myData)
 
 print("\n")
 
-plot = plt.imshow(image_data, cmap='gray', origin='lower', norm='linear', vmin=0)
-plt.xlim(1000+20,1060-10)
-plt.ylim(960+10,1020-20)
+plot = plt.imshow(image_data, cmap='plasma', origin='lower', norm='linear', vmin=0)
+# plt.xlim(1000+35,1060+5)
+# plt.ylim(960-30,1020-60)
 
 if contour == True:
-    plot.axes.set_title('SLTF(m5) and csSim(m5)',fontsize=20)
-    # cv = plt.contour(image_data, levels=[2600.61669921875*0.8], colors='#505050')
-    cs = plt.contour(image_data2, levels=[-100, simCountMax*1/10, simCountMax*2/10, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5, 100], 
-                     colors=('#ffffff', '#ffe000','#ffbd00', '#ffb600', '#ff7f0e', '#d62728', '#ffffff'))
-    cs.set_linewidth(1.4)
-    cbc = plt.colorbar(cs, shrink=1)
-    cb = plt.colorbar(plot)
-    cbc.add_lines(levels=[-100, simCountMax*1/10, simCountMax*2/10, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5, 100], 
-                  colors=('#ffffff', '#ffe000','#ffbd00', '#ffb600', '#ff7f0e', '#d62728', '#ffffff'), linewidths=6)
+    plot.axes.set_title('myData_offAxis_Testing',fontsize=20)
+    cv = plt.contour(image_data)
+    # cs = plt.contour(image_data, levels=[-500, simCountMax*1/10, simCountMax*2/10, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5, 500], 
+                    #  colors=('#ffffff', '#ffe000','#ffbd00', '#ffb600', '#ff7f0e', '#d62728', '#ffffff'))
+    # cs.set_linewidth(1.4)
+    # cbc = plt.colorbar(cs, shrink=1)
+    # cb = plt.colorbar(plot)
+    # cbc.add_lines(levels=[-100, simCountMax*1/10, simCountMax*2/10, simCountMax*2/5, simCountMax*3/5, simCountMax*4/5, 100], 
+    #               colors=('#ffffff', '#ffe000','#ffbd00', '#ffb600', '#ff7f0e', '#d62728', '#ffffff'), linewidths=6)
 
-    print(cbc.get_ticks())
-    cbc.set_ticks(ticks=cbc.get_ticks(),labels=['','10%','20%','40%','60%','80%',''], fontsize=12)
-    cbc.set_label('Simulation Percent of Max Intensity', fontsize=15)
+    # print(cbc.get_ticks())
+    # cbc.set_ticks(ticks=cbc.get_ticks(),labels=['','10%','20%','40%','60%','80%',''], fontsize=12)
+    # cbc.set_label('Simulation Percent of Max Intensity', fontsize=15)
     
 else:
     plot.axes.set_title('SLTF(m4)',fontsize=20)

@@ -35,24 +35,24 @@ if __name__ == '__main__':
     """
     passR = True
     spotW = False
-    plot3D = False
-    plotDetector = False
+    plot3D = True
+    plotDetector = True
     plotScatHist = False
     numRays = 500000
-    arcminOff = 0
+    arcminOff = -10
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
     blockerSegment = True
     bSegPos = 0
     bSegAng = 17
-    allRays2File = True
-    fitsBool = True
-    dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/arc_p6.csv"
-    detPosZ = 0.6              #[cm]
+    allRays2File = False
+    fitsBool = False
+    dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/offAxis_Testing_New_4_.csv"
+    detPosZ = 0.0              #[cm]
 
     ## Creating parameters for the shell
-    bs1 = [0,0,0]               #[cm]
+    bs1 = [0,0,0]               #[c
     focalLength = 109.01        #[cm]
     sLength = 12.50             #[cm]
     radii = [7.3061]
@@ -81,9 +81,9 @@ if __name__ == '__main__':
     modR_w = modDims[0]
     modR_s = modDims[1]
     modL = modDims[2]
-    print(modDims[0])
+    print(modDims[:])
     
-    detector = Detector(center=[0,0,121.51+detPosZ], normal=[0,0,1], height=1.3824*2, width=2.7648, reso=[1024*2,2048])
+    detector = Detector(center=[-5.736,0,120.84+detPosZ], normal=[-14.7836,0,120.84], height=1.3824, width=2.7648, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -111,8 +111,8 @@ if __name__ == '__main__':
     z_coord = r*np.cos(theta)
     z_ang = r*np.cos(theta)/r
 
-    source = Source(center=(x_coord,y_coord,-z_coord),width=modR_w*2, 
-                    height=modR_w*2, normal=(-x_coord,-y_coord,z_coord))
+    source = Source(center=(x_coord,y_coord,-z_coord),width=modR_w*8, 
+                    height=modR_w*8, normal=(-x_coord,-y_coord,z_coord))
     """
     Parameters:
             center:    the center location of the source
@@ -181,18 +181,6 @@ if __name__ == '__main__':
 
             # move ray to the front of the optics
             ray.moveToZ(module.coreFaces[0].center[2])
-            
-            """
-            If the ray's x coordinate is below 0.5*module's wide end radius, or if the y coordinate 
-            is below 0*module's wide end radius, then the ray is removed  
-            """
-            if blockerSegment == True:
-                bSeg = bSegPos + bSegAng 
-                if (
-                    (ray.pos[0] < modR_w*np.cos(np.radians(bSegAng)) or (ray.pos[0] > modR_w)) or 
-                    (ray.pos[1] < modR_w*-np.sin(np.radians(bSegAng)) or ray.pos[1] > modR_w*(np.sin(np.radians(bSegAng))))
-                   ): 
-                    ray.dead = True
 
             # reset surfaces
             surfaces = [s for s in allSurfaces]
@@ -238,16 +226,16 @@ if __name__ == '__main__':
                         # print("%i ray killed by reflect" % ray.num)
                         break
 
-                    if plot3D == True:
-                        """
-                        If the ray is not dead, then the rays with 2 bounces are plotted with green
-                            and the rays with only 1 bounce (ghost rays) are plotted in red
-                        """
-                        if ray.dead == False:
-                            if ray.bounces == 2:
-                                ray.plot3D(axes3D, 'g')
-                            elif ray.bounces == 1:
-                                ray.plot3D(axes3D, 'r')
+                    # if plot3D == True:
+                    #     """
+                    #     If the ray is not dead, then the rays with 2 bounces are plotted with green
+                    #         and the rays with only 1 bounce (ghost rays) are plotted in red
+                    #     """
+                    #     if ray.dead == False:
+                    #         if ray.bounces == 2:
+                    #             ray.plot3D(axes3D, 'g')
+                    #         elif ray.bounces == 1:
+                    #             ray.plot3D(axes3D, 'r')
 
                     # knowing the surface it has just hit, we can
                     # narrow down the number of surface to test
@@ -271,6 +259,29 @@ if __name__ == '__main__':
                     # print(ray.hist)
                     # print(ray.des)
 
+                """
+                If the ray's x coordinate is below 0.5*module's wide end radius, or if the y coordinate 
+                is below 0*module's wide end radius, then the ray is removed  
+                """
+                if blockerSegment == True:
+                    bSeg = bSegPos + bSegAng 
+                    if (
+                        (ray.pos[0] < 0 or (ray.pos[0] > modR_w)) or       #x-axis
+                        (ray.pos[1] < modR_w*-np.sin(np.radians(bSegAng)) or ray.pos[1] > modR_w*(np.sin(np.radians(bSegAng)))) #y-axis
+                        ): 
+                        ray.dead = True
+                
+                if plot3D == True:
+                        """
+                        If the ray is not dead, then the rays with 2 bounces are plotted with green
+                            and the rays with only 1 bounce (ghost rays) are plotted in red
+                        """
+                        if ray.dead == False:
+                            if ray.bounces == 2:
+                                ray.plot3D(axes3D, 'g')
+                            elif ray.bounces == 1:
+                                ray.plot3D(axes3D, 'r')
+
             sol = module.coreFaces[1].rayIntersect(ray)
             if sol is not None:
                 print("ray hit rear blocker")
@@ -287,8 +298,19 @@ if __name__ == '__main__':
 
             if ray.bounces == 0:
                 ray.dead = True
-            if ray.num % 5000 == 0:
+            if ray.num % 25000 == 0:
                 print(ray.num, "rays passed")
+
+    # h = int(0)
+    # p = int(0)
+    # for ray in rays:
+    #     if ray.dead == False:
+    #         print(ray.num)
+    #         print(ray.pos)
+    #         print(ray.dead)
+    #         print(ray.des)
+    #         print(ray.tag)
+    #         print(ray.hist)
 
     # catch rays at detector
     detector.catchRays(rays)
@@ -376,7 +398,7 @@ if __name__ == '__main__':
                         if checked.count(insert) == 0:
                             checked.append(insert)
                 """
-                print(rays[up1].des[0], rays[up1].des[1])
+                # print(rays[up1].des[0], rays[up1].des[1])
             up1 += 1
 
         for data in dataTemps:
@@ -391,7 +413,7 @@ if __name__ == '__main__':
             stuff = temp[0][0], temp[0][1], temp[1]
             dataFinal.append(stuff)
 
-        print(dataFinal)
+        # print(dataFinal)
 
     if allRays2File == True:
 
@@ -411,6 +433,17 @@ if __name__ == '__main__':
         
         f.close()
 
+    print('\n\n\n')
+
+    print("Source Centriod Position is x=%.4f, y=%.4f, z=%.4f"%(x_coord,y_coord,-z_coord))
+    print("Source Centriod Normal is x=%.4f, y=%.4f, z=%.4f"%(-x_coord,-y_coord,z_coord))
+    print("Source Angle is %d arcminutes off-axis"%arcminOff)
+    
+    print("Module Centriod Position is x=%.4f, y=%.4f, z=%.4f"%(0,0,0))
+    
+    print("Detector Centriod Position is x=%.4f, y=%.4f, z=%.4f"%(-5.736,0,121.51))
+    print("Detector Centriod Normal is x=%.4f, y=%.4f, z=%.4f"%(0,0,1))
+    print("Detector Size = [1.3824,2.7648*2] with Resolution = [1024,2048]")
 
     # show
     plt.show()
