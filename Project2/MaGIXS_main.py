@@ -37,18 +37,19 @@ if __name__ == '__main__':
     spotW = False
     plot3D = True
     plotDetector = True
-    plotScatHist = False
+    plotScatHist = True
     numRays = 500000
-    arcminOff = -10
+    arcminOff = -5
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
     blockerSegment = True
+    segmentPercents = True
     bSegPos = 0
     bSegAng = 17
-    allRays2File = False
-    fitsBool = False
-    dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project2/simCsvs/offAxis_Testing_New_4_.csv"
+    allRays2File = True
+    fitsBool = True
+    dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project3/simCsvs/Det20x10k_Sm5upTest3.csv"
     detPosZ = 0.0              #[cm]
 
     ## Creating parameters for the shell
@@ -83,7 +84,7 @@ if __name__ == '__main__':
     modL = modDims[2]
     print(modDims[:])
     
-    detector = Detector(center=[-5.736,0,120.84+detPosZ], normal=[-14.7836,0,120.84], height=1.3824, width=2.7648, reso=[1024,2048])
+    detector = Detector(center=[-5.736,0,120.84+detPosZ], normal=[0,0,1], height=1.3824, width=2.7648, reso=[1024,2048])
     """
     Parameters:
             center:    the center location of the detector
@@ -100,19 +101,24 @@ if __name__ == '__main__':
 
     ##Spherical (r, theta, phi) to Cartesian
     ## r = c
-    r = 10 #[cm]
-    theta = arcminOff/60/60                   #Deg/60/60 = x'
-    phi = 0                                   #Deg/60/60 = x'
+    r = 50 #[cm]
+    theta = arcminOff/60                      #Deg/60 = x'
+    theta2 = 0/60                             #Deg/60 = x'
+    phi = 0                                   #Deg/60 = x'
+    phi2 = 0                                  #Deg/60 = x'
     x_coord = r*np.sin(theta)*np.cos(phi)
-    if arcminDiag == True:
-        y_coord = x_coord
-    else:
-        y_coord = 0
+    y_coord = r*np.sin(theta2)*np.cos(phi2)
+    # if arcminDiag == True:
+    #     y_coord = x_coord
+    # else:
+    #     y_coord = 0
     z_coord = r*np.cos(theta)
     z_ang = r*np.cos(theta)/r
 
-    source = Source(center=(x_coord,y_coord,-z_coord),width=modR_w*8, 
-                    height=modR_w*8, normal=(-x_coord,-y_coord,z_coord))
+    print("[%.14f,%.14f,%.14f]"%(x_coord,y_coord,z_coord))
+
+    source = Source(center=(x_coord,y_coord,-z_coord),width=r*np.tan(30/60), 
+                    height=r*np.tan(30/60), normal=(-x_coord,-y_coord,z_coord))
     """
     Parameters:
             center:    the center location of the source
@@ -125,6 +131,7 @@ if __name__ == '__main__':
             spectrum:  optional numpy array (2xN) of energy spectrum
             tag : 'Source' Tag all rays with 'Source', place where the came from.
     """
+    
     shell = Shell(base=bs1, seglen=sLength, conic=False)
     """
     Parameters:
@@ -301,25 +308,13 @@ if __name__ == '__main__':
             if ray.num % 25000 == 0:
                 print(ray.num, "rays passed")
 
-    # h = int(0)
-    # p = int(0)
-    # for ray in rays:
-    #     if ray.dead == False:
-    #         print(ray.num)
-    #         print(ray.pos)
-    #         print(ray.dead)
-    #         print(ray.des)
-    #         print(ray.tag)
-    #         print(ray.hist)
-
-    # catch rays at detector
-    detector.catchRays(rays)
+        # catch rays at detector
+        detector.catchRays(rays)
 
     if plotDetector == True:
         ## plot detector pixels
         plot(detector)
         plt.gca().invert_yaxis()
-
 
     if plotScatHist == True:
         # create scatter plot
@@ -412,7 +407,6 @@ if __name__ == '__main__':
             temp = data
             stuff = temp[0][0], temp[0][1], temp[1]
             dataFinal.append(stuff)
-
         # print(dataFinal)
 
     if allRays2File == True:
@@ -433,17 +427,66 @@ if __name__ == '__main__':
         
         f.close()
 
-    print('\n\n\n')
+    if segmentPercents == True:
+        count = 0
+        count2 = 0
+        count3 = 0
+        count4 = 0
+        count5 = 0
+        count6 = 0
 
-    print("Source Centriod Position is x=%.4f, y=%.4f, z=%.4f"%(x_coord,y_coord,-z_coord))
-    print("Source Centriod Normal is x=%.4f, y=%.4f, z=%.4f"%(-x_coord,-y_coord,z_coord))
-    print("Source Angle is %d arcminutes off-axis"%arcminOff)
-    
-    print("Module Centriod Position is x=%.4f, y=%.4f, z=%.4f"%(0,0,0))
-    
-    print("Detector Centriod Position is x=%.4f, y=%.4f, z=%.4f"%(-5.736,0,121.51))
-    print("Detector Centriod Normal is x=%.4f, y=%.4f, z=%.4f"%(0,0,1))
-    print("Detector Size = [1.3824,2.7648*2] with Resolution = [1024,2048]")
+        for ray in rays:
+            if (
+                            (ray.pos[0] > 0 and (ray.pos[0] < modR_w)) and       #x-axis
+                            (ray.pos[1] > modR_w*-np.sin(np.radians(bSegAng)) and ray.pos[1] < modR_w*(np.sin(np.radians(bSegAng)))) #y-axis
+                            ): 
+                if 'Hy' in ray.tag or 'Pa' in ray.tag:
+                    count += 1
+                if 'Hy' in ray.tag and 'Pa' not in ray.tag:
+                    count2 += 1
+                if 'Pa' in ray.tag and 'Hy' not in ray.tag:
+                    count3 += 1
+
+            if 'D' in ray.tag:
+                if 'D' in ray.tag: 
+                    if 'Hy' in ray.tag or 'Pa' in ray.tag:
+                        count4 += 1
+                    if 'Hy' in ray.tag and 'Pa' not in ray.tag:
+                        count5 += 1
+                    if 'Pa' in ray.tag and 'Hy' not in ray.tag:
+                        count6 += 1
+        
+        if count > 0:
+            print("\nSegment Percentages\n"
+                "-------------------\n"
+                "Overall number of individual ray collisions: {} \n"
+                "{:.2f}% Paraboloid (n = {}) \n"
+                "{:.2f}% Hyperboloid (n = {}) \n"
+                .format(count,count2/count*100,count2,count3/count*100,count3)
+                )
+        
+        if count4 > 0:         #:If any rays hit the detector, the collision percentages for these rays are shown 
+            print("\nDetector Hit Percentages\n"
+                    "-------------------\n"
+                    "Overall number of individual ray's detected: {} \n"
+                    "{:.2f}% Paraboloid Only (n = {}) \n"
+                    "{:.2f}% Hyperboloid Only (n = {}) \n"
+                    .format(count4,count5/count4*100,count5,count6/count4*100,count6)
+                    )
+
+    # print("Source Centriod Position is x={:.4f}, y={:.4f}, z={:.4f}\n"
+    #       "Source Centriod Normal is x={:.4f}, y={:.4f}, z={:.4f}\n"
+    #       "Source Angle is {:d} arcminutes off-axis\n"
+    #       "Module Centriod Position is x={:.4f}, y={:.4f}, z={:.4f}\n"
+    #       "Detector Centriod Position is x={:.4f}, y={:.4f}, z={:.4f}\n"
+    #       "Detector Centriod Normal is x={:.4f}, y={:.4f}, z={:.4f}\n"
+    #       "Detector Size = [1.3824,2.7648*2] with Resolution = [1024,2048]\n"          
+    #       .format(x_coord,y_coord,-z_coord,-x_coord,-y_coord,z_coord,arcminOff,0,0,0,-5.736,0,121.51,0,0,1)
+    #       )
+
+    # for ray in rays:
+    #     if 'D' in ray.tag:
+    #         print("{}".format(ray.pos))
 
     # show
     plt.show()
