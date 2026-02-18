@@ -38,8 +38,8 @@ if __name__ == '__main__':
     plot3D = True
     plotDetector = True
     plotScatHist = True
-    numRays = 500000
-    arcminOff = -5
+    numRays = 50000
+    arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01

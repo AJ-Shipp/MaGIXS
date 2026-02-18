@@ -3,12 +3,12 @@
 ''' Example 2 using the geometry of the Hyp and Par. This should show
 perfect focusing with all rays falling in a point.'''
 
+from numpy.linalg import norm
 from foxsisim.module import Module
 from foxsisim.shell import Shell
 from foxsisim.detector import Detector
 from foxsisim.source import Source
 from foxsisim.mymath import reflect
-from numpy.linalg import norm
 from foxsisim.plotting import scatterHist, get3dAxes, plot
 import numpy as np
 from astropy.io import fits
@@ -34,24 +34,27 @@ if __name__ == '__main__':
     arcminDiag = If you want the x & y axes to be equally off axis
     """
     passR = True
-    spotW = False
+    spotW = True
     plot3D = True
-    plotDetector = True
+    plotDetector = False
     plotScatHist = True
-    numRays = 500000
-    arcminOff = -5
+    numRays = 50000
+    arcminOff = 0
     arcminDiag = False
     scatHistSize = 10
     binW = 0.01
-    blockerSegment = True
-    segmentPercents = True
+    blockerSegment = False
+    segmentPercents = False
     bSegPos = 0
     bSegAng = 17
-    allRays2File = True
-    fitsBool = True
+    allRays2File = False
+    fitsBool = False
     dataOutputFile = "C:/Users/antho/OneDrive/Documents/GitHub/MaGIXS/Project3/simCsvs/Det20x10k_Sm5arcminsInnerBlockRadiusDiff332.csv"
     detPosZ = 0.0              #[cm]
     coreRad = (7.512340477978545-0.332,0)
+    detectorScaling = 10
+    detectorCenter = [-5.736,0,120.84+detPosZ]
+    # detectorCenter = [0,0,120.84+detPosZ]
 
     ## Creating parameters for the shell
     bs1 = [0,0,0]               #[c
@@ -62,7 +65,7 @@ if __name__ == '__main__':
 
     ## Initialization of the module, detector, source, and shell
     module = Module(base=[0, 0, 0], seglen=sLength, focal=focalLength, radii=radii, angles=None,
-                 conic=False, shield=True, core_radius=coreRad)
+                 conic=True, shield=True, core_radius=coreRad)
     """
     Parameters:
             base:       the center point of the wide end of the segment
@@ -86,7 +89,9 @@ if __name__ == '__main__':
     print("Module Dimensions: ",modDims[:])
     print("Core Radius: ",coreRad[:])
     
-    detector = Detector(center=[-5.736,0,120.84+detPosZ], normal=[0,0,1], height=1.3824*10, width=2.7648*10, reso=[1024*10,2048*10])
+    detector = Detector(center=detectorCenter, normal=[0,0,1], 
+                        height=1.3824*detectorScaling, width=2.7648*detectorScaling, 
+                        reso=[1024*detectorScaling,2048*detectorScaling])
     """
     Parameters:
             center:    the center location of the detector
